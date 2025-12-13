@@ -49,26 +49,54 @@ namespace Tokenparser {
 	}
 
 	uint8_t getPVarT(const std::string& str) {
-		if(str == "angle")
-			return VAR_ANGLE;
-		else if(str == "bit")
-			return VAR_BIT;
+		if(str == "u1")
+			return VAR_U1;
+
+		else if(str == "u8")
+			return VAR_U8;
+		else if(str == "i8")
+			return VAR_I8;
+		else if(str == "c8")
+			return VAR_C8;
+
+		else if(str == "u16")
+			return VAR_U16;
+		else if(str == "i16")
+			return VAR_I16;
+		else if(str == "c16")
+			return VAR_C16;
+
+		else if(str == "u32")
+			return VAR_U32;
+		else if(str == "i32")
+			return VAR_I32;
+		else if(str == "c32")
+			return VAR_C32;
+		else if(str == "f32")
+			return VAR_F32;
+
+		else if(str == "u64")
+			return VAR_U64;
+		else if(str == "i64")
+			return VAR_I64;
+		else if(str == "f64")
+			return VAR_F64;
+
+		else if(str == "u128")
+			return VAR_U128;
+		else if(str == "i128")
+			return VAR_I128;
+		else if(str == "f128")
+			return VAR_F128;
+
+		else if(str == "usize")
+			return VAR_USIZE;
+		else if(str == "isize")
+			return VAR_ISIZE;
+
 		else if(str == "bool")
 			return VAR_BOOL;
-		else if(str == "char")
-			return VAR_CHAR;
-		else if(str == "short")
-			return VAR_SHORT;
-		else if(str == "int")
-			return VAR_INT;
-		else if(str == "float")
-			return VAR_FLOAT;
-		else if(str == "double")
-			return VAR_DOUBLE;
-		else if(str == "long")
-			return VAR_LONG;
-		else if(str == "void")
-			return VAR_VOID;
+
 		return VAR_UNDEFINED;
 	}
 
@@ -81,14 +109,6 @@ namespace Tokenparser {
 			if(c_token.ttype == Tokens::TOK_TYPE) {
 				uint8_t vtype = getPVarT(c_token.name);
 				eat(Tokens::TOK_TYPE);
-				if(vtype == VAR_LONG) switch(c_typer->vtype) {
-					case VAR_LONG:
-					case VAR_DOUBLE:
-					case VAR_INT:
-						++c_typer->vtype;
-						continue;
-					default: break;
-				}
 
 				if(is_type_specified_in_this_scope)
 					std::cerr << "Warning! Declaration with multiple types, last one will be count!!" << std::endl;

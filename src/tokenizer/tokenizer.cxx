@@ -133,16 +133,33 @@ std::string readLine(std::istream &in) {
 void procAlpNum(Token& arg) {
 	const std::string& name = arg.name;
 	Tokens::Type type;
-	if(name == "angle" ||
-		name == "bit" ||
+	if(
+		name == "u1" ||
+
+		name == "u8" ||
+		name == "i8" ||
+		name == "c8" ||
+
+		name == "u16" ||
+		name == "i16" ||
+		name == "c16" ||
+
+		name == "u32" ||
+		name == "i32" ||
+		name == "c32" ||
+		name == "f32" ||
+
+		name == "u64" ||
+		name == "i64" ||
+		name == "f64" ||
+
+		name == "u128" ||
+		name == "i128" ||
+		name == "f128" ||
+
 		name == "bool" ||
-		name == "char" ||
-		name == "short" ||
-		name == "int" ||
-		name == "float" ||
-		name == "double" ||
-		name == "long" ||
-		name == "void")
+		name == "void"
+	)
 		type = Tokens::TOK_TYPE;
 	else if(name == "struct")
 		type = Tokens::TOK_STRUCT;

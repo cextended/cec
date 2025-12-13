@@ -6,18 +6,43 @@
 
 enum {
 	VAR_UNDEFINED=0,
-	VAR_ANGLE,
-	VAR_BIT,
+
+	/**
+	*  These types basicly represents one bit.
+	*  Even that doesn't make sense in clasical computing, these units can be applicable to quantum computing.
+	*/
+	VAR_U1,
+
+	VAR_U8,
+	VAR_I8,
+	VAR_C8,
+
+	VAR_U16,
+	VAR_I16,
+	VAR_C16,
+
+	VAR_U32,
+	VAR_I32,
+	VAR_C32,
+	VAR_F32,
+
+	VAR_U64,
+	VAR_I64,
+	VAR_F64,
+
+	VAR_U128,
+	VAR_I128,
+	VAR_F128,
+
+	/**
+	*  These two types going to have number of bits that equals to bits of the cpu architecture.
+	*  eg. If cpu is x64, these numbers basicly be equals to u64 and i64.
+	*/
+	VAR_USIZE,
+	VAR_ISIZE,
+
 	VAR_BOOL,
-	VAR_CHAR,
-	VAR_SHORT,
-	VAR_FLOAT,
-	VAR_DOUBLE,
-	VAR_LDOUBLE,
-	VAR_INT,
-	VAR_LONG,
-	VAR_LLONG,
-	VAR_VOID,
+
 	VAR_POINTER,
 	VAR_ARRAY,
 	VAR_FUN,
