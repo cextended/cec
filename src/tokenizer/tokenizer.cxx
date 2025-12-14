@@ -345,7 +345,7 @@ Token readAlpNum(std::istream &in) {
 
 inline int toNumber(int c) {
 	if(c >= '0' && c <= '9')
-		return c -'0';
+		return c - '0';
 	else if(c >= 'a' && c <= 'f')
 		return c - 'a' + 10;
 	else if(c >= 'A' && c <= 'F')
@@ -354,92 +354,72 @@ inline int toNumber(int c) {
 }
 Token readNum(std::istream& in) {
 	size_t start_index=in.tellg();
+	size_t end_index = 0;
 
-	bool isOnFrac=false;
-	long long number = 0;
-	long long number_frac=0;
-
+	std::string ret;
 
         int curr = in.peek();
+
+	bool continueReading=false;
 	if(curr == '0') {
 		in.ignore(), curr = in.peek();
 
 		if(curr == 'x' || curr == 'X') {
+			ret = "0x";
 			in.ignore(), curr = in.peek();
-			while(std::isxdigit(curr) or curr == '.' or curr == '_') {
-				if(curr == '_') continue;
-				if(curr == '.') {
-					isOnFrac = true;
+			while(std::isxdigit(curr) || curr == '.' || curr == '_') {
+				if(curr == '_') {
+					++end_index;
 					in.ignore(), curr = in.peek();
 					continue;
 				}
 
-				number <<= 4;
-				(isOnFrac ? number_frac : number) += toNumber(in.get());
+				ret += "" + toNumber(in.get());
 				curr = in.peek();
 			}
 		} else if(curr == 'b' || curr == 'B') {
+			ret = "0b";
 			in.ignore(), curr = in.peek();
-			while(curr == '0' or curr == '1' or curr == '.' or curr == '_') {
-				if(curr == '_') continue;
-				if(curr == '.') {
-					isOnFrac = true;
+			while(curr == '0' || curr == '1' || curr == '.' || curr == '_') {
+				if(curr == '_') {
+					++end_index;
 					in.ignore(), curr = in.peek();
 					continue;
 				}
 
-				number <<= 1;
-				(isOnFrac ? number_frac : number) += in.get() - '0';
+				ret += in.get();
 				curr = in.peek();
 			}
 
-		} else {
-			in.ignore(), curr = in.peek();
-			while((curr >= '0' and curr <= '7') or curr == '.' or curr == '0') {
-				if(curr == '_') continue;
-				if(curr == '.') {
-					isOnFrac = true;
-					in.ignore(), curr = in.peek();
-					continue;
-				}
+		} else
+			continueReading = true, ret = "0";
+	} else
+		continueReading = true;
 
-				number <<= 3;
-				(isOnFrac ? number_frac : number) += in.get() - '0';
-				curr = in.peek();
-			}
-		}
-	} else while(std::isdigit(curr) || curr == '.' || curr == '_') {
-		if(curr == '_') continue;
-		if(curr == '.') {
-			isOnFrac = true;
+	if(continueReading)
+	while(std::isdigit(curr) || curr == '.' || curr == '_') {
+		if(curr == '_') {
+			++end_index;
 			in.ignore(), curr = in.peek();
 			continue;
 		}
-		number *= 10;
-		(isOnFrac ? number_frac : number) += in.get() - '0';
+		ret += in.get();
 		curr = in.peek();
         }
 
-	std::string ret;
-	if(isOnFrac)
-		ret = "f";
-	else ret = "i";
+	end_index += ret.size();
 
-	for(int i=0; i < sizeof(number); i++)
-		ret += (char)(number >> i);
-
-	for(int i=0; i < sizeof(number_frac); i++)
-		ret += (char)(number_frac >> i);
 
         Token tok;
         tok.name = ret;
         tok.line = line;
-        tok.endOffset = start_index + ret.size();
+        tok.endOffset = end_index;
         tok.column = tok.endOffset - line_beg + 1;
         tok.startOffset = start_index;
 	tok.ttype = Tokens::TOK_NUMBER_LITERAL;
 
-        return tok;}
+        return tok;
+}
 
 Token readChar(std::istream& in) {
 	size_t start_index = in.tellg();
