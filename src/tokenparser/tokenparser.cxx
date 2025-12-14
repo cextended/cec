@@ -100,21 +100,16 @@ namespace Tokenparser {
 		return VAR_UNDEFINED;
 	}
 
-	int eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll, std::vector<StmPtr> *parent = nullptr) {
-
-		bool is_type_specified_in_this_scope = false;
-
-		std::shared_ptr<Typer> p_typer = nullptr; // to add parantheses at the end, parantheses has more priority
+	int eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll) {
 		while(1) {
 			if(c_token.ttype == Tokens::TOK_TYPE) {
 				uint8_t vtype = getPVarT(c_token.name);
 				eat(Tokens::TOK_TYPE);
 
-				if(is_type_specified_in_this_scope)
+				if(c_typer->vtype)
 					std::cerr << "Warning! Declaration with multiple types, last one will be count!!" << std::endl;
 
 				c_typer->vtype = vtype;
-				is_type_specified_in_this_scope = true;
 			}
 			else if(eat(Tokens::TOK_KEY_QUANTUM))
 				c_typer->spec |= (1 << SPEC_QU);
@@ -126,109 +121,45 @@ namespace Tokenparser {
 				c_typer->spec |= (1 << SPEC_EXT);
 			else if(eat(Tokens::TOK_KEY_VOLATILE))
 				c_typer->spec |= (1 << SPEC_VOL);
-			else if(followAll && eat(Tokens::TOK_STAR)) {
-				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
-				ptr_typer->vtype = VAR_POINTER;
-				ptr_typer->respect_typer = c_typer;
-				c_typer = ptr_typer;
-			} else if(followAll && eat(Tokens::TOK_DEL_PARANL) ) {
-				p_typer = std::make_shared<Typer>();
-				eatDec(p_typer, parent);
+			else if(eat(Tokens::TOK_DEL_PARANL)) {
+				std::shared_ptr<BlockStatement> body = std::make_shared<BlockStatement>();
+				if( !eatDec(body) ) {
+					/* error */
+				}
 				if(!eat(Tokens::TOK_DEL_PARANR)) {
-					/* Error */
-					// Should match left paranthese with right one
-					unclosedParanthesesError(c_token);
-					return 0;
+					/* error */
 				}
-				break;
-			} else if(parent && c_token.ttype == Tokens::TOK_IDENTIFIER) {
-				if(p_typer) {
-					/* Error */
-					moreThanOneIdentifiersError(c_token);
-					return 0;
+				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+				ptr_typer->func_params = body->childs;
+				if(c_typer)
+					c_typer->respect_typer = ptr_typer;
+				ptr_typer->vtype = VAR_FUN;
+				c_typer = ptr_typer;
+			} else if(eat(Tokens::TOK_DEL_SBRACL)) {
+				ExprPtr expr = eval(Tokens::TOK_DEL_SBRACR);
+				if(!expr) {
+					/* error */
 				}
-				p_typer = std::make_shared<Typer>();
-                                p_typer->vtype = VAR_DEC;
-				p_typer->var_name = c_token.name;
-
-				eat(Tokens::TOK_IDENTIFIER); // end
-				break;
+				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+				ptr_typer->sizer = expr;
+				if(c_typer)
+					c_typer->respect_typer = ptr_typer;
+				c_typer->vtype = VAR_ARRAY;
+				c_typer = ptr_typer;
+			} else if(followAll && eat(Tokens::TOK_STAR)) {
+				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+				if(c_typer)
+					c_typer->respect_typer = ptr_typer;
+				c_typer->vtype = VAR_POINTER;
+				c_typer = ptr_typer;
                         } else break;
 		};
-
-
-		std::shared_ptr<Typer> post_typer = nullptr;
-		std::shared_ptr<Typer> c_post_typer = nullptr;
-
-		while(followAll) {
-			if(eat(Tokens::TOK_DEL_SBRACL)) {
-				std::shared_ptr<Typer> arr_typer = std::make_shared<Typer>();
-				arr_typer->vtype = VAR_ARRAY;
-				if(!eat(Tokens::TOK_DEL_SBRACR)) /* Predict if is it already end */
-					arr_typer->sizer = eval(/* Till that -> */ Tokens::TOK_DEL_SBRACR);
-
-				if(!post_typer) post_typer = c_post_typer = arr_typer;
-				else c_post_typer->respect_typer = arr_typer;
-
-			} else if(eat(Tokens::TOK_DEL_PARANL)) {
-				std::shared_ptr<Typer> func_typer = std::make_shared<Typer>();
-				func_typer->vtype = VAR_FUN;
-				if(!eat(Tokens::TOK_DEL_PARANR)) {/* Predict if is it already end */
-					eatDec(nullptr, &func_typer->func_params);
-
-					if(!eat(Tokens::TOK_DEL_PARANR)) {
-						/* Syntax error, Parantheses ' () ' didn't closed*/
-						unclosedParanthesesError(c_token);
-						return 0;
-					}
-				}
-
-				if(!post_typer) post_typer = c_post_typer = func_typer;
-				else c_post_typer->respect_typer = func_typer;
-
-			} else break;
-		}
-
-		if(post_typer != nullptr) {
-			post_typer->respect_typer = c_typer;
-			c_typer = post_typer;
-		}
-
-		if(p_typer != nullptr) {
-			p_typer->respect_typer = c_typer;
-			c_typer = p_typer;
-		}
 
 /*
 *		I'll use Tokens::TOK_SYS_SKIP instead of Tokens::TOK_SEMICOLON because I wan't to get rid of semicolons without breaking C syntax as much as posible .
 *
 *		I'll set initializer to the highest typer and it's 'Tokens Typer::ttype' should be equals to Tokens::VAR_DEC .
 */
-
-		if(followAll && c_typer->vtype == VAR_DEC) {
-			if(eat(Tokens::TOK_ASSIGN)) {
-
-				if(c_typer->respect_typer->vtype == VAR_FUN) {
-					std::shared_ptr<Typer> fun_ptr = std::make_shared<Typer>();
-					fun_ptr->vtype = VAR_POINTER;
-					fun_ptr->respect_typer = c_typer->respect_typer;
-					c_typer->respect_typer = fun_ptr;
-				}
-
-				std::shared_ptr<ExpressionStatement> initializer = std::make_shared<ExpressionStatement>();
-				initializer->expr = std::make_shared<BinaryExpression>(
-						std::make_shared<VariableExpression>(c_typer->var_name),
-						OPE::ASSIGN,
-						eval_single(Tokens::TOK_SYS_SKIP)
-					);
-
-				c_typer->initializer = initializer;
-			} else if(c_typer->respect_typer && c_typer->respect_typer->vtype == VAR_FUN) {
-				std::shared_ptr<BlockStatement> func_body = std::make_shared<BlockStatement>();
-				proc(func_body, true);
-				c_typer->initializer = func_body;
-			}
-		}
 
 		return c_typer->vtype;
 	};
@@ -237,33 +168,113 @@ namespace Tokenparser {
 		return 0;
 	}
 
-	int eatDec(std::shared_ptr<Typer> main_typer, std::vector<StmPtr> *parent) {
-		if(!main_typer)
-			main_typer = std::make_shared<Typer>();
-		if(!eatTyper(main_typer, false))
-			return 0;
-
+	int eatDec(
+		std::shared_ptr< BlockStatement > parent
+	) {
+		bool hasAssignments = false;
+		std::vector< std::tuple< std::string, std::shared_ptr<Typer>, ExprPtr > > var_list;
+		std::vector< std::shared_ptr<Typer> > t_list;
 		do {
-			std::shared_ptr<Typer> c_typer = std::make_shared<Typer>(*main_typer);
-			if(!eatTyper(c_typer, true, parent)) {
-				/* Error */
-				std::cout << "Required a variable declaration!" << std::endl;
-				return 0;
-			} else if(c_typer->vtype == VAR_DEC) {
-				// Now declare/assign a variable with the variable/function 'c_typer->vname' (std::string)
-				std::shared_ptr<DeclarationStatement> stm = std::make_shared<DeclarationStatement>();
-				stm->type_spec = c_typer;
-				parent->push_back(stm);
-			} else {
-				/* Error */
-				std::cout << "Required a variable declaration!" << std::endl;
+			if(c_token.ttype != Tokens::TOK_IDENTIFIER) {
 				return 0;
 			}
+
+			std::string var_name = c_token.name;
+			eat(Tokens::TOK_IDENTIFIER);
+
+			std::shared_ptr<Typer> c_typer = std::make_shared<Typer>();
+			if(!eatTyper(c_typer, true)) {
+				/* error */
+			}
+
+			if(eat(Tokens::TOK_ASSIGN)) {
+				hasAssignments = true;
+				ExprPtr expr = std::make_shared<BinaryExpression>(
+			                std::make_shared<VariableExpression>(var_name),
+			                OPE::ASSIGN,
+			                eval_single(Tokens::TOK_SYS_SKIP)
+			        );
+				var_list.push_back({
+					var_name,
+					c_typer,
+					expr
+				});
+			}
+
 		} while(eat(Tokens::TOK_COMMA));
+
+		std::shared_ptr<Typer> master_typer = nullptr;
+		ExprPtr master_assign = nullptr;
+		if(eat(Tokens::TOK_COLON)) {
+			master_typer = std::make_shared<Typer>();
+			if(!eatTyper(master_typer, true)) {
+				/* error */
+			}
+
+			if(eat(Tokens::TOK_ASSIGN)) {
+				if(hasAssignments) {
+					/* warning */
+					// Some variables has already been assigned!
+				}
+				master_assign = eval_tuple(Tokens::TOK_SYS_SKIP);
+			}
+		}
+
+		for(auto [var_name, typer, expr]: var_list) {
+			if(master_typer) {
+				std::shared_ptr<Typer> c_typer = typer;
+        	                while(c_typer->respect_typer)
+	                                c_typer = c_typer->respect_typer;
+				c_typer->respect_typer = master_typer;
+			}
+
+			std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
+                        decStm->name = var_name;
+                        decStm->type_spec = typer;
+                        decStm->initializer = master_assign ? master_assign : expr;
+                        parent->childs.push_back(decStm);
+		}
 
 		return 1;
 	}
 
+	int eatFnDec(
+		std::shared_ptr<BlockStatement> parent
+	) {
+		if(c_token.ttype != Tokens::TOK_IDENTIFIER)
+			return 0;
+
+		std::string var_name = c_token.name;
+		eat(Tokens::TOK_IDENTIFIER);
+
+		std::shared_ptr<Typer> c_typer = std::make_shared<Typer>();
+		if(!eatTyper(c_typer, true)) {
+			/* error */
+		}
+
+		// If therese no parameters specified, set it as 0 parameters
+		if(c_typer->vtype != VAR_FUN) {
+			std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+			ptr_typer->vtype = VAR_FUN;
+			if(c_typer)
+				c_typer->respect_typer = ptr_typer;
+			c_typer = ptr_typer;
+		}
+
+		if(!eat(Tokens::TOK_DEL_CBRACL)) {
+			/* error */
+			return 0;
+		}
+		std::shared_ptr<FunctionDeclarationStatement> decStm = std::make_shared<FunctionDeclarationStatement>();
+		decStm->name = var_name;
+		decStm->type_spec = c_typer;
+		decStm->body = std::make_shared<BlockStatement>();
+		if(proc_body(decStm->body, Tokens::TOK_DEL_CBRACR)) {
+			/* error */
+		}
+
+		return 1;
+	}
 
 
 	/*
@@ -281,11 +292,24 @@ namespace Tokenparser {
 			return 0;
 		}
 
-		if(eatDec(nullptr, &parent->childs)) {
+		if(eat(Tokens::TOK_KEY_VAL)) {
+			if(!eatDec(parent)) {
+				/* error */
+				return 1;
+			}
 			if(_inline) {
 				/* Warning */
 				/* Maybe can be solved with -O1 or -O2 (I'll add these options later) */
 			}
+			return 0;
+		}
+
+		if(eat(Tokens::TOK_KEY_FN)) {
+			if(!eatFnDec(parent)) {
+				/* error */
+				return 1;
+			}
+
 			return 0;
 		}
 
@@ -311,7 +335,6 @@ namespace Tokenparser {
 
 	int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token) {
 		while(true) {
-
 			int cons = proc(parent, false);
 			if(cons == 1)
 				return 0;
@@ -319,7 +342,7 @@ namespace Tokenparser {
 		}
 
 		if(!eat(end_token)) { /* Error */
-			std::cout << "Unexpected token, expected ' } '" << std::endl;
+			std::cout << "Unexpected token: " << c_token.name << std::endl;
 			return 1;
 		}
 		return 0;

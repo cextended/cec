@@ -21,7 +21,12 @@ namespace Tokenparser {
 	ExprPtr eval(Tokens::Type till);
 
 	int eat(Tokens::Type ttype);
-	int eatDec(std::shared_ptr<Typer> main_typer, std::vector<StmPtr> *parent);
+	int eatDec(
+		std::shared_ptr<BlockStatement> parent
+	);
+	int eatFnDec(
+		std::shared_ptr<BlockStatement> parent
+	);
 
         int proc(std::shared_ptr<BlockStatement> parent, const bool _inline = true);
         int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token = Tokens::TOK_SYS_EOF);

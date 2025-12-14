@@ -114,7 +114,9 @@ struct Statement {
 using StmPtr = std::shared_ptr<Statement>;
 
 struct DeclarationStatement : Statement {
+	std::string name;
 	std::shared_ptr<Typer> type_spec;
+	ExprPtr initializer;
 
 	void accept(ExpressionVisitor& v) override;
 };
@@ -123,6 +125,14 @@ struct BlockStatement : public Statement {
 	std::vector<StmPtr> childs;
 
 	void accept(ExpressionVisitor& v) override;
+};
+
+struct FunctionDeclarationStatement : Statement {
+        std::string name;
+        std::shared_ptr<Typer> type_spec;
+        std::shared_ptr<BlockStatement> body;
+
+        void accept(ExpressionVisitor& v) override;
 };
 
 struct ExpressionStatement : public Statement {
@@ -168,6 +178,7 @@ struct ExpressionVisitor {
 
 	virtual void visit(DeclarationStatement &s) = 0;
 	virtual void visit(BlockStatement &s) = 0;
+	virtual void visit(FunctionDeclarationStatement &s) = 0;
 	virtual void visit(ExpressionStatement &s) = 0;
 	virtual void visit(IfStatement &s) = 0;
 	virtual void visit(WhileStatement &s) = 0;

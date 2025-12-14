@@ -64,13 +64,10 @@ struct Statement; // Pre definition
 using StmPtr = std::shared_ptr<Statement>;
 
 struct Typer {
-	std::string var_name;
 	ExprPtr sizer;
 	uint8_t vtype;
 	uint8_t spec;
 	std::shared_ptr<Typer> respect_typer;
 	std::vector<StmPtr> func_params;
-
-	StmPtr initializer;
 };
 
