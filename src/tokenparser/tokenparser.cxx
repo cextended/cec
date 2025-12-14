@@ -222,7 +222,7 @@ namespace Tokenparser {
 
 		for(auto [var_name, typer, expr]: var_list) {
 			if(master_typer) {
-				master_typer->respect_typer = c_typer;
+				master_typer->respect_typer = typer;
 				typer = master_typer;
 			}
 
