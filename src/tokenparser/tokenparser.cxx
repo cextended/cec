@@ -223,8 +223,8 @@ namespace Tokenparser {
 		for(auto [var_name, typer, expr]: var_list) {
 			if(master_typer) {
 				std::shared_ptr<Typer> c_typer = typer;
-        	                while(c_typer->respect_typer)
-	                                c_typer = c_typer->respect_typer;
+				while(c_typer->respect_typer)
+					c_typer = c_typer->respect_typer;
 				c_typer->respect_typer = master_typer;
 			}
 
@@ -292,7 +292,7 @@ namespace Tokenparser {
 			return 0;
 		}
 
-		if(eat(Tokens::TOK_KEY_VAL)) {
+		if(eat(Tokens::TOK_KEY_LET)) {
 			if(!eatDec(parent)) {
 				/* error */
 				return 1;

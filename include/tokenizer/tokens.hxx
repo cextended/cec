@@ -16,7 +16,7 @@ typedef enum {
 
 	TOK_SPACE,
 
-	TOK_KEY_VAL,
+	TOK_KEY_LET,
 	TOK_KEY_FN,
 	TOK_KEY_IF,
 	TOK_KEY_FOR,
@@ -40,8 +40,8 @@ typedef enum {
 	TOK_KEY_ENUM,
 	TOK_KEY_UNION,
 	TOK_KEY_NDET, /*  Example:
-			  *  val byte ndet u1 = |0b101> + |0b011>
-			  *  val ndet ndet u1 = |.5f>
+			  *  let byte ndet u1 = |0b101> + |0b011>
+			  *  let ndet ndet u1 = |.5f>
 			  */
 
 	TOK_DEL_PARANL,  // (
@@ -79,10 +79,11 @@ typedef enum {
 	TOK_ASSIGN_SWAP, /* <>
 
 				EXAMPLE:
-				val a=0, b=0 : ndet u1;
+				let a=0, b=0 : ndet u1;
 
-				a <> b // it would return value of left hand 'a'
-			*/
+				a <> b // it changes values of both a and b with each other
+                                       // it would return value of left hand 'a'
+                          */
 
 	TOK_OP_EQEQ, // ==
 	TOK_OP_NEQ, // !=
