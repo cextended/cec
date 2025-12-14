@@ -111,8 +111,8 @@ namespace Tokenparser {
 
 				c_typer->vtype = vtype;
 			}
-			else if(eat(Tokens::TOK_KEY_QUANTUM))
-				c_typer->spec |= (1 << SPEC_QU);
+			else if(eat(Tokens::TOK_KEY_NDET))
+				c_typer->spec |= (1 << SPEC_NDET);
 			else if(eat(Tokens::TOK_KEY_CONST))
 				c_typer->spec |= (1 << SPEC_CONST);
 			else if(eat(Tokens::TOK_KEY_INLINE))

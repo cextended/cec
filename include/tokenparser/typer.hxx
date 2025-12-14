@@ -50,7 +50,7 @@ enum {
 };
 
 enum {
-	SPEC_QU = 0,
+	SPEC_NDET = 0,
 	SPEC_CONST,
 	SPEC_INL,
 	SPEC_EXT,
