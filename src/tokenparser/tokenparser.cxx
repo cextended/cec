@@ -222,10 +222,8 @@ namespace Tokenparser {
 
 		for(auto [var_name, typer, expr]: var_list) {
 			if(master_typer) {
-				std::shared_ptr<Typer> c_typer = typer;
-				while(c_typer->respect_typer)
-					c_typer = c_typer->respect_typer;
-				c_typer->respect_typer = master_typer;
+				master_typer->respect_typer = c_typer;
+				typer = master_typer;
 			}
 
 			std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
