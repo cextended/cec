@@ -123,7 +123,7 @@ namespace Tokenparser {
 							main_expr,
 							OPE::ASSIGN,
 							eval());
-		return 0;
+		return main_expr;
 	}
 
 	ExprPtr eval_single(Tokens::Type till) {
