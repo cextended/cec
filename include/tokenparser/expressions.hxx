@@ -113,8 +113,16 @@ struct Statement {
 
 using StmPtr = std::shared_ptr<Statement>;
 
+enum DeclarationType {
+	UNDEFINED = 0,
+	CONST,
+	STATIC
+};
+
+
 struct DeclarationStatement : Statement {
 	std::string name;
+	DeclarationType dec_spec;
 	std::shared_ptr<Typer> type_spec;
 	ExprPtr initializer;
 
@@ -129,6 +137,7 @@ struct BlockStatement : public Statement {
 
 struct FunctionDeclarationStatement : Statement {
         std::string name;
+	DeclarationType dec_spec;
         std::shared_ptr<Typer> type_spec;
         std::shared_ptr<BlockStatement> body;
 
