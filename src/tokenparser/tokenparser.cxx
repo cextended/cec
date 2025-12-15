@@ -113,8 +113,8 @@ namespace Tokenparser {
 			}
 			else if(eat(Tokens::TOK_KEY_NDET))
 				c_typer->spec |= (1 << SPEC_NDET);
-			else if(eat(Tokens::TOK_KEY_CONST))
-				c_typer->spec |= (1 << SPEC_CONST);
+			else if(eat(Tokens::TOK_KEY_MUT))
+				c_typer->spec |= (1 << SPEC_MUT);
 			else if(eat(Tokens::TOK_KEY_INLINE))
 				c_typer->spec |= (1 << SPEC_INL);
 			else if(eat(Tokens::TOK_KEY_EXTERN))
@@ -123,7 +123,7 @@ namespace Tokenparser {
 				c_typer->spec |= (1 << SPEC_VOL);
 			else if(eat(Tokens::TOK_DEL_PARANL)) {
 				std::shared_ptr<BlockStatement> body = std::make_shared<BlockStatement>();
-				if( !eatDec(body) ) {
+				if( !eatDec(body, DeclarationType::UNDEFINED) ) {
 					/* error */
 				}
 				if(!eat(Tokens::TOK_DEL_PARANR)) {
@@ -169,7 +169,8 @@ namespace Tokenparser {
 	}
 
 	int eatDec(
-		std::shared_ptr< BlockStatement > parent
+		std::shared_ptr< BlockStatement > parent,
+		DeclarationType dec_type
 	) {
 		bool hasAssignments = false;
 		std::vector< std::tuple< std::string, std::shared_ptr<Typer>, ExprPtr > > var_list;
@@ -228,6 +229,7 @@ namespace Tokenparser {
 
 			std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
                         decStm->name = var_name;
+			decStm->dec_type = dec_type;
                         decStm->type_spec = typer;
                         decStm->initializer = master_assign ? master_assign : expr;
                         parent->childs.push_back(decStm);
@@ -237,7 +239,8 @@ namespace Tokenparser {
 	}
 
 	int eatFnDec(
-		std::shared_ptr<BlockStatement> parent
+		std::shared_ptr<BlockStatement> parent,
+		DeclarationType dec_type
 	) {
 		if(c_token.ttype != Tokens::TOK_IDENTIFIER)
 			return 0;
@@ -265,6 +268,7 @@ namespace Tokenparser {
 		}
 		std::shared_ptr<FunctionDeclarationStatement> decStm = std::make_shared<FunctionDeclarationStatement>();
 		decStm->name = var_name;
+		decStm->dec_type = dec_type;
 		decStm->type_spec = c_typer;
 		decStm->body = std::make_shared<BlockStatement>();
 		if(proc_body(decStm->body, Tokens::TOK_DEL_CBRACR)) {
@@ -283,18 +287,28 @@ namespace Tokenparser {
 	*/
 
 	int proc(std::shared_ptr<BlockStatement> parent, const bool _inline) {
-
 		if(eat(Tokens::TOK_DEL_CBRACL)) {
 			if(proc_body(parent, Tokens::TOK_DEL_CBRACR)) return 1;
 
 			return 0;
 		}
 
-		if(eat(Tokens::TOK_KEY_LET)) {
-			if(!eatDec(parent)) {
+		DeclarationType dec_type = DeclarationType::UNDEFINED;
+
+		if(eat(Tokens::TOK_KEY_CONST)) {
+			dec_type = DeclarationType::CONST;
+		} else if(eat(Tokens::TOK_KEY_STATIC)) {
+			dec_type = DeclarationType::STATIC;
+		}
+
+		if(eat(Tokens::TOK_KEY_FN)) {
+			if(!eatFnDec(parent, dec_type)) {
 				/* error */
 				return 1;
 			}
+
+			return 0;
+		} else if(((dec_type != DeclarationType::UNDEFINED) || eat(Tokens::TOK_KEY_LET)) && eatDec(parent, dec_type)) {
 			if(_inline) {
 				/* Warning */
 				/* Maybe can be solved with -O1 or -O2 (I'll add these options later) */
@@ -302,13 +316,9 @@ namespace Tokenparser {
 			return 0;
 		}
 
-		if(eat(Tokens::TOK_KEY_FN)) {
-			if(!eatFnDec(parent)) {
-				/* error */
-				return 1;
-			}
-
-			return 0;
+		if(dec_type) {
+			/* error */
+			return 1;
 		}
 
 		if(eat(Tokens::TOK_KEY_RETURN)) {

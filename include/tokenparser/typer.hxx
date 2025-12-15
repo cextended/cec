@@ -51,7 +51,7 @@ enum {
 
 enum {
 	SPEC_NDET = 0,
-	SPEC_CONST,
+	SPEC_MUT,
 	SPEC_INL,
 	SPEC_EXT,
 	SPEC_VOL,

@@ -122,7 +122,7 @@ enum DeclarationType {
 
 struct DeclarationStatement : Statement {
 	std::string name;
-	DeclarationType dec_spec;
+	DeclarationType dec_type;
 	std::shared_ptr<Typer> type_spec;
 	ExprPtr initializer;
 
@@ -137,7 +137,7 @@ struct BlockStatement : public Statement {
 
 struct FunctionDeclarationStatement : Statement {
         std::string name;
-	DeclarationType dec_spec;
+	DeclarationType dec_type;
         std::shared_ptr<Typer> type_spec;
         std::shared_ptr<BlockStatement> body;
 

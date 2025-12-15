@@ -22,10 +22,12 @@ namespace Tokenparser {
 
 	int eat(Tokens::Type ttype);
 	int eatDec(
-		std::shared_ptr<BlockStatement> parent
+		std::shared_ptr<BlockStatement> parent,
+		DeclarationType dec_type
 	);
 	int eatFnDec(
-		std::shared_ptr<BlockStatement> parent
+		std::shared_ptr<BlockStatement> parent,
+		DeclarationType dec_type
 	);
 
         int proc(std::shared_ptr<BlockStatement> parent, const bool _inline = true);

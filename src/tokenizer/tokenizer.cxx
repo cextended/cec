@@ -195,6 +195,8 @@ void procAlpNum(Token& arg) {
                 type = Tokens::TOK_KEY_SIZEOF;
         else if(name == "typedef")
                 type = Tokens::TOK_KEY_TYPEDEF;
+        else if(name == "mut")
+                type = Tokens::TOK_KEY_MUT;
         else if(name == "const")
                 type = Tokens::TOK_KEY_CONST;
         else if(name == "volatile")
