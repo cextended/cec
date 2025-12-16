@@ -177,7 +177,7 @@ namespace Tokenparser {
 		std::vector< std::shared_ptr<Typer> > t_list;
 		do {
 			if(c_token.ttype != Tokens::TOK_IDENTIFIER) {
-				return 0;
+				break;
 			}
 
 			std::string var_name = c_token.name;
@@ -273,8 +273,8 @@ namespace Tokenparser {
 		decStm->body = std::make_shared<BlockStatement>();
 		if(proc_body(decStm->body, Tokens::TOK_DEL_CBRACR)) {
 			/* error */
+			return 0;
 		}
-
 		return 1;
 	}
 
@@ -289,7 +289,6 @@ namespace Tokenparser {
 	int proc(std::shared_ptr<BlockStatement> parent, const bool _inline) {
 		if(eat(Tokens::TOK_DEL_CBRACL)) {
 			if(proc_body(parent, Tokens::TOK_DEL_CBRACR)) return 1;
-
 			return 0;
 		}
 
