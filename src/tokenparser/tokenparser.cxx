@@ -217,8 +217,16 @@ namespace Tokenparser {
 					/* warning */
 					// Some variables has already been assigned!
 				}
-				master_assign = eval_tuple(Tokens::TOK_SYS_SKIP);
+				master_assign = eval_single(Tokens::TOK_SYS_SKIP);
 			}
+		}
+
+		int index=0;
+
+		std::shared_ptr<MultipleDeclarationStatement> mulDecStm;
+		if(mulDecStm->initializer = master_assign) {
+			mulDecStm = std::make_shared<MultipleDeclarationStatement>();
+			parent->childs.push_back(mulDecStm);
 		}
 
 		for(auto [var_name, typer, expr]: var_list) {
@@ -231,8 +239,12 @@ namespace Tokenparser {
                         decStm->name = var_name;
 			decStm->dec_type = dec_type;
                         decStm->type_spec = typer;
-                        decStm->initializer = master_assign ? master_assign : expr;
-                        parent->childs.push_back(decStm);
+			if(master_assign)
+				mulDecStm->list.push_back(decStm);
+			else {
+				decStm->initializer = expr;
+	                        parent->childs.push_back(decStm);
+			}
 		}
 
 		return 1;

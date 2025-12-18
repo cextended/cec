@@ -106,6 +106,38 @@ struct VariableExpression : public Expression {
         void accept(ExpressionVisitor& v) override;
 };
 
+
+/**
+ *  Using for reaching members with ' . ' or ' -> ' operator
+ *  eg.
+ *     let foo Foo
+ *     foo.bar();
+ */
+struct MemberExpression : public VariableExpression {
+	bool isPointer;
+	ExprPtr parent;
+
+	MemberExpression(ExprPtr parent, std::string name);
+
+        void accept(ExpressionVisitor& v) override;
+};
+
+/**
+ *  Using for reaching elements through array and map
+ *  eg.
+ *     let mymap hashmap<string, int>
+ *     map["foo"] = bar
+ */
+struct SubscriptExpression : public Expression {
+	bool isPointer;
+	ExprPtr parent;
+	ExprPtr index;
+
+	SubscriptExpression(ExprPtr parent, ExprPtr index);
+
+        void accept(ExpressionVisitor& v) override;
+};
+
 struct Statement {
 	virtual ~Statement() = default;
 	virtual void accept(ExpressionVisitor& v) = 0;
@@ -124,6 +156,13 @@ struct DeclarationStatement : Statement {
 	std::string name;
 	DeclarationType dec_type;
 	std::shared_ptr<Typer> type_spec;
+	ExprPtr initializer;
+
+	void accept(ExpressionVisitor& v) override;
+};
+
+struct MultipleDeclarationStatement : Statement {
+	std::vector< std::shared_ptr<DeclarationStatement> > list;
 	ExprPtr initializer;
 
 	void accept(ExpressionVisitor& v) override;
@@ -184,8 +223,11 @@ struct ExpressionVisitor {
 	virtual void visit(UnaryExpression &e) = 0;
 	virtual void visit(LiteralExpression &e) = 0;
 	virtual void visit(VariableExpression &e) = 0;
+	virtual void visit(MemberExpression &e) = 0;
+	virtual void visit(SubscriptExpression &e) = 0;
 
 	virtual void visit(DeclarationStatement &s) = 0;
+	virtual void visit(MultipleDeclarationStatement &s) = 0;
 	virtual void visit(BlockStatement &s) = 0;
 	virtual void visit(FunctionDeclarationStatement &s) = 0;
 	virtual void visit(ExpressionStatement &s) = 0;
