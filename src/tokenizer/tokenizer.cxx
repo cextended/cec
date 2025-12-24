@@ -89,7 +89,18 @@ int proc() {
 			c_token = readString(in);
 		} else if(isSymbol(curr)) {
 			c_token = readSymbol(in);
-			procSymbol(c_token);
+			if(c_token.name == "//") {
+				while(in.get() != '\n'); // Skip all chracters till new line when '//' appeared.
+
+				continue; // This continue belogns to upper loop, not this ^^ while loop
+			} else if(c_token.name == "/*") { /* I'm adding this line so GNU nano wouldn't get fucked up because of '/*' in string, LOL */
+				while(in.peek() != EOF ) /* When '/*' appeared skip all chracters till: */
+					if(in.get() == '*' && in.get() == '/')
+						break;
+				continue; // This continue belogns to upper loop, not this ^^ while loop
+
+			} else
+				procSymbol(c_token);
 		} else if(curr == '\n' || curr == ' ' || curr == '\t') {
 			size_t start_index = static_cast<size_t>(in.tellg());
 			size_t start_col = start_index - line_beg + 1;
@@ -111,6 +122,7 @@ int proc() {
 						line,
 						static_cast<size_t>(in.tellg()) - line_beg + 1,
 						readLine(in)), 1);
+
 
 		_output_stream << c_token;
         }
@@ -540,8 +552,12 @@ Token readSymbol(std::istream& in) {
                         break;
                 }
         } else switch(p) {
-		case '*':
 		case '/':
+        	        p = in.peek();
+			if(p == '=' || p == '/' || p == '*')
+                        	tok.name += in.get();
+			break;
+		case '*':
 		case '%':
 		case '^':
         	        p = in.peek();

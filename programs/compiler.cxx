@@ -38,18 +38,19 @@ int main(int argc, char *argv[]) {
                 }
         }
 
-	std::string cmd = "cc -E -x c ";
-
-	if(in != "")
-                cmd += in + " | ";
+	std::string cmd = "";
 
 	cmd += getExecutableDir() + "/tokenizer ";
 
-	cmd +=  " | " + getExecutableDir() + "/tokenparser ";
+	if(in != "")
+                cmd += in;
 
+	cmd +=  " | " + getExecutableDir() + "/tokenparser ";
 
 	if(out != "")
 		cmd += "-o " + out;
+
+	std::cerr << cmd << std::endl;
 
 	system(cmd.c_str());
 
