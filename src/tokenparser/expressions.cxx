@@ -23,4 +23,5 @@ void ExpressionStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
 void IfStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
 void WhileStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
 void ForStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
+void ForEachStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
 void ReturnStatement::accept(ExpressionVisitor& v) { v.visit(*this); }
