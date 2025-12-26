@@ -1,6 +1,6 @@
 #pragma once
 
-#include<iostream>
+#include<util/datapipe.hxx>
 #include<vector>
 #include<tokenizer/tokens.hxx>
 #include<tokenparser/expressions.hxx>
@@ -12,7 +12,7 @@ namespace Tokenparser {
 		EAT_INFO_SKIP = 0b10,
 	};
 
-	void use(std::istream &input_stream);
+	void use(DataPipe<Token> &input_pipe);
 	void use(std::shared_ptr<BlockStatement> stm_root);
 	void use(int log_options);
 

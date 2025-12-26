@@ -3,7 +3,12 @@
 #include <unistd.h>
 #include <limits.h>
 #include <iostream>
+#include <fstream>
+#include<thread>
 
+#include <tokenizer/tokenizer.hxx>
+#include <tokenparser/tokenparser.hxx>
+/*
 inline
 std::string getExecutablePath() {
     char result[PATH_MAX];
@@ -16,6 +21,7 @@ std::string getExecutableDir() {
     std::string path = getExecutablePath();
     return path.substr(0, path.find_last_of('/'));
 }
+*/
 
 
 int main(int argc, char *argv[]) {
@@ -38,21 +44,28 @@ int main(int argc, char *argv[]) {
                 }
         }
 
-	std::string cmd = "";
+	std::istream *ins;
+	if(in.empty())
+		ins = &std::cin;
+	else
+		ins = new std::ifstream(in);
 
-	cmd += getExecutableDir() + "/tokenizer ";
+	Tokenizer::use(*ins);
 
-	if(in != "")
-                cmd += in;
+	DataPipe<Token> lex2par;
+	Tokenizer::use(lex2par);
+	Tokenparser::use(lex2par);
 
-	cmd +=  " | " + getExecutableDir() + "/tokenparser ";
+	std::shared_ptr<BlockStatement> stm_root = std::make_shared<BlockStatement>();
+	Tokenparser::use(stm_root);
 
-	if(out != "")
-		cmd += "-o " + out;
+	std::thread lexTh(static_cast<int(*)()>(Tokenizer::proc));
+	std::thread parTh(static_cast<int(*)()>(Tokenparser::proc));
 
-	std::cerr << cmd << std::endl;
+	lexTh.join();
+	parTh.join();
 
-	system(cmd.c_str());
-
+	if(ins != &std::cin)
+		delete ins;
 	return 0;
 }

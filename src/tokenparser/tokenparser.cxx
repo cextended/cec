@@ -4,12 +4,12 @@
 
 namespace Tokenparser {
 
-	std::istream  *_input_stream;
+	DataPipe<Token> *_input_pipe;
 	std::shared_ptr<BlockStatement> stm_root;
 	int _log_options = EAT_INFO_EAT | EAT_INFO_SKIP;
 
-	void use(std::istream &input_stream) {
-	        _input_stream = &input_stream;
+	void use(DataPipe<Token> &input_pipe) {
+	        _input_pipe = &input_pipe;
 	}
 
 	void use(std::shared_ptr<BlockStatement> _stm_root) {
@@ -41,7 +41,7 @@ namespace Tokenparser {
 		if(c_token.ttype == ttype) {
 			if(_log_options & EAT_INFO_EAT)
 				std::cout << "Eat : " << c_token.line << ":" << token_name << std::endl;
-			_input_stream >> c_token;
+			*_input_pipe >> c_token;
 			return 1;
 		}
 
@@ -387,8 +387,8 @@ namespace Tokenparser {
 	}
 
 	int proc() {
-		if(!_input_stream || !stm_root) return 1;
-		_input_stream >> c_token;
+		if(!_input_pipe || !stm_root) return 1;
+		*_input_pipe >> c_token;
 		return proc_body(stm_root);
 	}
 }

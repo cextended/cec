@@ -14,8 +14,8 @@ size_t line, line_beg;
 
 bool isSystem;
 
-std::istream  *_input_stream;
-std::ostream *_output_stream;
+std::istream *_input_stream;
+DataPipe<Token> *_output_pipe;
 
 std::string current_file;
 
@@ -39,8 +39,8 @@ void use(std::istream &input_stream) {
 	_input_stream = &input_stream;
 }
 
-void use(std::ostream &output_stream) {
-	_output_stream = &output_stream;
+void use(DataPipe<Token> &output_pipe) {
+	_output_pipe = &output_pipe;
 }
 
 int proc() {
@@ -124,12 +124,12 @@ int proc() {
 						readLine(in)), 1);
 
 
-		_output_stream << c_token;
+		*_output_pipe << std::move(c_token);
         }
 
 	Token eof_token;
 	eof_token.ttype = Tokens::TOK_SYS_EOF;
-	_output_stream << eof_token;
+	*_output_pipe << std::move(eof_token);
 
 	return 0;
 }
