@@ -197,16 +197,28 @@ struct IfStatement : public Statement {
 };
 
 struct WhileStatement : public IfStatement {
-	bool atleastonce = false; // If true, process it like do-while
+	ExprPtr condition;
+
+	StmPtr lead, body, trail;
 
 	void accept(ExpressionVisitor& v) override;
 };
 
 struct ForStatement : public Statement {
-	StmPtr init;
+	std::shared_ptr<BlockStatement> init;
 	ExprPtr condition;
 	StmPtr update;
-	StmPtr body;
+
+	StmPtr lead, body, trail;
+
+	void accept(ExpressionVisitor& v) override;
+};
+
+struct ForEachStatement : public IfStatement {
+	std::shared_ptr<BlockStatement> init;
+	ExprPtr iterable;
+
+	StmPtr lead, body, trail;
 
 	void accept(ExpressionVisitor& v) override;
 };
