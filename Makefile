@@ -1,32 +1,55 @@
 CXX := g++
-STD := -std=c++17
-CXXFLAGS := $(STD) -march=native -I./include
 BUILD := build
 BIN := bin
+TARGET := $(BIN)/segvc
 
-SRCS_TOKENIZER := programs/tokenizer.cxx $(shell find src/tokenizer/ -type f -regex '.*\.\(cxx\|cpp\)$$')
-OBJS_TOKENIZER := $(patsubst %, $(BUILD)/%.o, $(SRCS_TOKENIZER:/=_))
+STD := -std=c++17
+INCLUDES := -I./include
 
-SRCS_TOKENPARSER := programs/tokenparser.cxx $(shell find src/tokenparser/ src/tokenizer/tokens.cxx -type f -regex '.*\.\(cxx\|cpp\)$$')
-OBJS_TOKENPARSER := $(patsubst %, $(BUILD)/%.o, $(SRCS_TOKENPARSER:/=_))
+MODE ?= release
 
-.PHONY: all lexer parser segvc
-all: lexer parser segvc
+COMMON_FLAGS := $(STD) $(INCLUDES)
 
-lexer: $(BIN)/tokenizer
-parser: $(BIN)/tokenparser
-segvc: $(BIN)/segvc
+ifeq ($(MODE),release)
+    CXXFLAGS := $(COMMON_FLAGS) \
+        -O3 \
+        -march=native \
+        -flto \
+        -DNDEBUG
+else ifeq ($(MODE),dev)
+    CXXFLAGS := $(COMMON_FLAGS) \
+        -Og \
+        -g3 \
+        -fno-omit-frame-pointer \
+        -DDEBUG \
+        -fsanitize=address,undefined
+else
+    $(error Unknown MODE: $(MODE))
+endif
 
-$(BIN)/tokenizer: $(OBJS_TOKENIZER)
+# ========================
+# SOURCES
+# ========================
+
+SRCS_PROGRAM := programs/compiler.cxx
+SRCS_SRC := $(shell find src -type f -regex '.*\.\(cxx\|cpp\)$$')
+SRCS := $(SRCS_PROGRAM) $(SRCS_SRC)
+
+OBJS := $(patsubst %, $(BUILD)/%.o, $(SRCS:/=_))
+
+# ========================
+# RULES
+# ========================
+
+.PHONY: all dev clean
+
+all: $(TARGET)
+
+dev:
+	$(MAKE) MODE=dev
+
+$(TARGET): $(OBJS)
 	@mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-$(BIN)/tokenparser: $(OBJS_TOKENPARSER)
-	@mkdir -p $(BIN)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-$(BIN)/segvc: ./programs/compiler.cxx
-	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(BUILD)/%.o: %
@@ -34,4 +57,4 @@ $(BUILD)/%.o: %
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	@rm -rf bin build
+	rm -rf $(BIN) $(BUILD)
