@@ -41,7 +41,8 @@ namespace Tokenparser {
 		if(c_token.ttype == ttype) {
 			if(_log_options & EAT_INFO_EAT)
 				std::cout << "Eat : " << c_token.line << ":" << token_name << std::endl;
-			*_input_pipe >> c_token;
+			if(c_token.ttype != Tokens::TOK_SYS_EOF)
+				*_input_pipe >> c_token;
 			return 1;
 		}
 
