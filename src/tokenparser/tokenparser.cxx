@@ -358,6 +358,15 @@ namespace Tokenparser {
 		}
 		stmRet->body = body;
 
+		if(eat(Tokens::TOK_KEY_THEN)) {
+			std::shared_ptr<BlockStatement> trailingBlock = std::make_shared<BlockStatement>();
+			if(proc(trailingBlock)) {
+				/* error */
+				return 0;
+			}
+			stmRet->trail = trailingBlock;
+		}
+
 		parent->childs.push_back(stmRet);
 		return 1;
 	}
