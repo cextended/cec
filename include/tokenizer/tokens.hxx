@@ -16,6 +16,7 @@ typedef enum {
 
 	TOK_SPACE,
 
+	TOK_KEY_IN,
 	TOK_KEY_LET,
 	TOK_KEY_FN,
 	TOK_KEY_IF,

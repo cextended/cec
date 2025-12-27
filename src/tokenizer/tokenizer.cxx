@@ -175,6 +175,8 @@ void procAlpNum(Token& arg) {
 		type = Tokens::TOK_TYPE;
 	else if(name == "struct")
 		type = Tokens::TOK_STRUCT;
+	else if(name == "in")
+		type = Tokens::TOK_KEY_IN;
 	else if(name == "let")
 		type = Tokens::TOK_KEY_LET;
 	else if(name == "fn")
