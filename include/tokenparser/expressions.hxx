@@ -204,20 +204,23 @@ struct WhileStatement : public IfStatement {
 	void accept(ExpressionVisitor& v) override;
 };
 
-struct ForStatement : public IfStatement {
+struct BasicForStatement : public Statement {
 	std::shared_ptr<BlockStatement> init;
-	StmPtr update;
 
 	StmPtr lead, body, trail;
+
+	virtual void accept(ExpressionVisitor& v) override = 0;
+};
+
+struct ForStatement : public BasicForStatement {
+	ExprPtr condition;
+	StmPtr update;
 
 	void accept(ExpressionVisitor& v) override;
 };
 
-struct ForEachStatement : public Statement {
-	std::shared_ptr<BlockStatement> init;
+struct ForEachStatement : public BasicForStatement {
 	ExprPtr iterable;
-
-	StmPtr lead, body, trail;
 
 	void accept(ExpressionVisitor& v) override;
 };
