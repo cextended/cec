@@ -310,6 +310,57 @@ namespace Tokenparser {
 		return 1;
 	}
 
+	int eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock = nullptr) {
+		std::shared_ptr<BasicForStatement> stmRet;
+		std::shared_ptr<BlockStatement> decs = std::make_shared<BlockStatement>();
+		if(!eatDec(decs, DeclarationType::UNDEFINED)) {
+			/* error */
+			return 0;
+		} else if(eat(Tokens::TOK_KEY_IN)) {
+			ExprPtr exp = eval(Tokens::TOK_SYS_SKIP);
+			if (!exp) {
+				/* error */
+				return 0;
+			}
+			std::shared_ptr<ForEachStatement> stm = std::make_shared<ForEachStatement>();
+			stm->init = decs;
+			stm->lead = leadingBlock;
+			stm->iterable = exp;
+			stmRet = stm;
+		} else if(eat(Tokens::TOK_SEMICOLON)) {
+			ExprPtr condition = eval(Tokens::TOK_SYS_SKIP);
+			std::shared_ptr<BlockStatement> update = std::make_shared<BlockStatement>();
+			if(!condition) {
+				/* error */
+				return 0;
+			}
+			if(eat(Tokens::TOK_SEMICOLON)) { // It's optional
+				if(proc(update)) {
+					return 0;
+				}
+			}
+
+			std::shared_ptr<ForStatement> stm = std::make_shared<ForStatement>();
+			stm->init = decs;
+			stm->lead = leadingBlock;
+			stm->update = update;
+			stmRet = stm;
+		} else {
+			/* error */
+			std::cerr << "Unexpected token '" << c_token.name << "', expected 'in' or ';'" << std::endl;
+			return 0;
+		}
+
+		std::shared_ptr<BlockStatement> body = std::make_shared<BlockStatement>();
+		if(proc(body, Tokens::TOK_SYS_SKIP)) {
+			/* error */
+			return 0;
+		}
+		stmRet->body = body;
+
+		parent->childs.push_back(stmRet);
+		return 1;
+	}
 
 	/*
 	* Return values and their meanings:
@@ -352,6 +403,29 @@ namespace Tokenparser {
 			return 1;
 		}
 
+		if(eat(Tokens::TOK_KEY_DO)) {
+			std::shared_ptr<BlockStatement> scopeBlock = std::make_shared<BlockStatement>();
+			if(proc(scopeBlock)) {
+				/* error */
+				return 1;
+			} else if(eat(Tokens::TOK_KEY_FOR)) {
+				if(!eatForStatement(parent, scopeBlock)) {
+					/* error */
+					return 1;
+				}
+			} else {
+				parent->childs.push_back(scopeBlock); // create new scope by default
+			}
+			return 0;
+		} else if(eat(Tokens::TOK_KEY_FOR)) {
+			if(!eatForStatement(parent)) {
+				/* error */
+				return 1;
+			}
+			return 0;
+		}
+
+
 		if(eat(Tokens::TOK_KEY_RETURN)) {
 			std::shared_ptr<ReturnStatement> stm = std::make_shared<ReturnStatement>();
 			stm->expr = eval(Tokens::TOK_SYS_SKIP);
@@ -368,7 +442,6 @@ namespace Tokenparser {
 
 		if(eat(Tokens::TOK_SEMICOLON))
 			return 0;
-
 		return 2;
 	}
 
