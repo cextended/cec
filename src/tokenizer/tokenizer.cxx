@@ -193,6 +193,8 @@ void procAlpNum(Token& arg) {
                 type = Tokens::TOK_KEY_ELSE;
         else if(name == "do")
                 type = Tokens::TOK_KEY_DO;
+	else if(name == "then")
+		type = Tokens::TOK_KEY_THEN;
         else if(name == "switch")
                 type = Tokens::TOK_KEY_SWITCH;
         else if(name == "case")
