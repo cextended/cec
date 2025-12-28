@@ -165,10 +165,6 @@ namespace Tokenparser {
 		return c_typer->vtype;
 	};
 
-	int getPSize(std::string s) {
-		return 0;
-	}
-
 	int eatDec(
 		std::shared_ptr< BlockStatement > parent,
 		DeclarationType dec_type
