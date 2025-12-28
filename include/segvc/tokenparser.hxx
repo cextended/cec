@@ -4,6 +4,7 @@
 #include<vector>
 #include<segvc/tokens.hxx>
 #include<segvc/expressions.hxx>
+#include<segvc/tokenparser.eval.hxx>
 
 namespace Tokenparser {
 
@@ -22,10 +23,6 @@ namespace Tokenparser {
 	void use(int log_options);
 
 	uint8_t getPVarT(const std::string& str);
-
-	ExprPtr eval_single(Tokens::Type till);
-	std::shared_ptr<TupleExpression> eval_tuple(Tokens::Type till);
-	ExprPtr eval(Tokens::Type till);
 
 	int eat(Tokens::Type ttype);
 	int eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll);
