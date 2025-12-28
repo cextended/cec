@@ -7,6 +7,11 @@
 
 namespace Tokenparser {
 
+	extern DataPipe<Token> *_input_pipe;
+	extern std::shared_ptr<BlockStatement> stm_root;
+	extern int _log_options = EAT_INFO_EAT | EAT_INFO_SKIP;
+	extern Token c_token;
+
 	enum {
 		EAT_INFO_EAT = 0b1,
 		EAT_INFO_SKIP = 0b10,
