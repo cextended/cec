@@ -1,6 +1,6 @@
 #pragma once
 
-#include<segvc/datapipe.hxx>
+#include<segvc/util/datapipe.hxx>
 #include<vector>
 #include<segvc/tokens.hxx>
 #include<segvc/expressions.hxx>
@@ -37,6 +37,11 @@ namespace Tokenparser {
 	);
 
         int eatForStatement(
+		std::shared_ptr<BlockStatement> parent,
+		std::shared_ptr<BlockStatement> leadingBlock = nullptr
+	);
+
+        int eatWhileStatement(
 		std::shared_ptr<BlockStatement> parent,
 		std::shared_ptr<BlockStatement> leadingBlock = nullptr
 	);
