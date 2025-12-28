@@ -16,8 +16,6 @@ namespace Tokenizer {
 
 	int proc();
 
-	std::string readLine(std::istream &in);
-
 	void procAlpNum(Token& arg);
 	void procSymbol(Token& arg);
 	Token readAlpNum(std::istream &in);
