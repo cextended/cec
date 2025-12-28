@@ -7,7 +7,7 @@ namespace Tokenparser {
 
 
 	#define DEFINE_EVAL(n) ExprPtr eval##n();
-	DEFINE_EVAL()
+	DEFINE_EVAL(0)
 	DEFINE_EVAL(1)
 	DEFINE_EVAL(2)
 	DEFINE_EVAL(3)
