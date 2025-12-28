@@ -310,7 +310,7 @@ namespace Tokenparser {
 		return 1;
 	}
 
-	int eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock = nullptr) {
+	int eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
 		std::shared_ptr<BasicForStatement> stmRet;
 		std::shared_ptr<BlockStatement> decs = std::make_shared<BlockStatement>();
 		if(!eatDec(decs, DeclarationType::UNDEFINED)) {
