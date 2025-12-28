@@ -1,0 +1,45 @@
+#include <segvc/tokenparser.hxx>
+#include <segvc/expressions.hxx>
+#include <segvc/qcerrors.hxx>
+
+namespace Tokenparser {
+	int eatFnDec(
+		std::shared_ptr<BlockStatement> parent,
+		DeclarationType dec_type
+	) {
+		if(c_token.ttype != Tokens::TOK_IDENTIFIER)
+			return 0;
+
+		std::string var_name = c_token.name;
+		eat(Tokens::TOK_IDENTIFIER);
+
+		std::shared_ptr<Typer> c_typer = std::make_shared<Typer>();
+		if(!eatTyper(c_typer, true)) {
+			/* error */
+		}
+
+		// If therese no parameters specified, set it as 0 parameters
+		if(c_typer->vtype != VAR_FUN) {
+			std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+			ptr_typer->vtype = VAR_FUN;
+			if(c_typer)
+				c_typer->respect_typer = ptr_typer;
+			c_typer = ptr_typer;
+		}
+
+		if(!eat(Tokens::TOK_DEL_CBRACL)) {
+			/* error */
+			return 0;
+		}
+		std::shared_ptr<FunctionDeclarationStatement> decStm = std::make_shared<FunctionDeclarationStatement>();
+		decStm->name = var_name;
+		decStm->dec_type = dec_type;
+		decStm->type_spec = c_typer;
+		decStm->body = std::make_shared<BlockStatement>();
+		if(proc_body(decStm->body, Tokens::TOK_DEL_CBRACR)) {
+			/* error */
+			return 0;
+		}
+		return 1;
+	}
+}
