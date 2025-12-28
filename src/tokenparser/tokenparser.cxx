@@ -1,6 +1,6 @@
-#include <tokenparser/tokenparser.hxx>
-#include <tokenparser/expressions.hxx>
-#include <qcerrors.hxx>
+#include <segvc/tokenparser.hxx>
+#include <segvc/expressions.hxx>
+#include <segvc/qcerrors.hxx>
 
 namespace Tokenparser {
 

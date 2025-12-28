@@ -1,10 +1,10 @@
-#include <tokenizer/tokens.hxx>
-#include <tokenizer/tokenizer.hxx>
+#include <segvc/tokens.hxx>
+#include <segvc/tokenizer.hxx>
 #include <string>
 #include <cstring>
 #include <cstdint>
 #include <cctype>
-#include <qcerrors.hxx>
+#include <segvc/qcerrors.hxx>
 #include <iostream>
 #include <unordered_map>
 

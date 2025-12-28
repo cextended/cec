@@ -1,7 +1,7 @@
 #pragma once
 
-#include<util/datapipe.hxx>
-#include<tokenizer/tokens.hxx>
+#include<segvc/datapipe.hxx>
+#include<segvc/tokens.hxx>
 
 namespace Tokenizer {
 

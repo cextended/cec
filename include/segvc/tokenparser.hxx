@@ -1,9 +1,9 @@
 #pragma once
 
-#include<util/datapipe.hxx>
+#include<segvc/datapipe.hxx>
 #include<vector>
-#include<tokenizer/tokens.hxx>
-#include<tokenparser/expressions.hxx>
+#include<segvc/tokens.hxx>
+#include<segvc/expressions.hxx>
 
 namespace Tokenparser {
 

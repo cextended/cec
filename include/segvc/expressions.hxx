@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include <tokenparser/typer.hxx>
+#include <segvc/typer.hxx>
 
 enum class OPE {
 	ADD,

@@ -6,8 +6,8 @@
 #include <fstream>
 #include<thread>
 
-#include <tokenizer/tokenizer.hxx>
-#include <tokenparser/tokenparser.hxx>
+#include <segvc/tokenizer.hxx>
+#include <segvc/tokenparser.hxx>
 /*
 inline
 std::string getExecutablePath() {
