@@ -9,12 +9,11 @@
 #include <unordered_map>
 
 namespace Tokenizer {
-	size_t line, line_beg;
+	void use(std::istream &input_stream) {
+		_input_stream = &input_stream;
+	}
 
-	bool isSystem;
-
-	std::istream *_input_stream;
-	DataPipe<Token> *_output_pipe;
-
-	std::string current_file;
+	void use(DataPipe<Token> &output_pipe) {
+		_output_pipe = &output_pipe;
+	}
 }
