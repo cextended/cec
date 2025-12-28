@@ -28,9 +28,6 @@ Token readString(std::istream &in);
 Token readSymbol(std::istream &in);
 
 void procAlpNum(Token& arg);
-void procNum(Token& arg);
-void procChar(Token& arg);
-void procString(Token& arg);
 void procSymbol(Token& arg);
 
 bool isSymbol(const char &c);
@@ -235,9 +232,6 @@ void procAlpNum(Token& arg) {
 
 	arg.ttype = type;
 };
-void procNum(Token& arg) {};
-void procChar(Token& arg) {};
-void procString(Token& arg) {};
 void procSymbol(Token& arg) {
 	const std::string& name = arg.name;
 	Tokens::Type type;
