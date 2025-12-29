@@ -54,6 +54,11 @@ namespace Tokenparser {
 					/* error */
 					return 1;
 				}
+			} else if(eat(Tokens::TOK_KEY_WHILE)) {
+				if(!eatWhileStatement(parent, scopeBlock)) {
+					/* error */
+					return 1;
+				}
 			} else {
 				parent->childs.push_back(scopeBlock); // create new scope by default
 			}
