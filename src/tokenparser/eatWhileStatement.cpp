@@ -15,7 +15,7 @@ namespace Tokenparser {
 
 		stmRet->condition = condition;
 		std::shared_ptr<BlockStatement> body = std::make_shared<BlockStatement>();
-		if(proc(body, Tokens::TOK_SYS_SKIP)) {
+		if(proc(body, true, true)) {
 			/* error */
 			return 0;
 		}
