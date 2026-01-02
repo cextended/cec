@@ -28,7 +28,7 @@ namespace Tokenparser {
 				return 0;
 			}
 			if(eat(Tokens::TOK_SEMICOLON)) { // It's optional
-				if(proc(update)) {
+				if(proc(update, true, true)) {
 					return 0;
 				}
 			}
@@ -53,7 +53,7 @@ namespace Tokenparser {
 
 		if(eat(Tokens::TOK_KEY_THEN)) {
 			std::shared_ptr<BlockStatement> trailingBlock = std::make_shared<BlockStatement>();
-			if(proc(trailingBlock)) {
+			if(proc(trailingBlock, true, true)) {
 				/* error */
 				return 0;
 			}

@@ -23,7 +23,7 @@ namespace Tokenparser {
 
 		if(eat(Tokens::TOK_KEY_THEN)) {
 			std::shared_ptr<BlockStatement> trailingBlock = std::make_shared<BlockStatement>();
-			if(proc(trailingBlock)) {
+			if(proc(trailingBlock, true, true)) {
 				/* error */
 				return 0;
 			}

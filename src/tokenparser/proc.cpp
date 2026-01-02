@@ -10,8 +10,8 @@ namespace Tokenparser {
 	*   1 : Problem caught
 	*   2 : Finish
 	*/
-	int proc(std::shared_ptr<BlockStatement> parent, const bool _inline) {
-		if(eat(Tokens::TOK_DEL_CBRACL)) {
+	int proc(std::shared_ptr<BlockStatement> parent, const bool _inline, const bool subscope) {
+		if(subscope && eat(Tokens::TOK_DEL_CBRACL)) {
 			if(proc_body(parent, Tokens::TOK_DEL_CBRACR)) return 1;
 			return 0;
 		}
@@ -46,7 +46,7 @@ namespace Tokenparser {
 
 		if(eat(Tokens::TOK_KEY_DO)) {
 			std::shared_ptr<BlockStatement> scopeBlock = std::make_shared<BlockStatement>();
-			if(proc(scopeBlock)) {
+			if(proc(scopeBlock, true, true)) {
 				/* error */
 				return 1;
 			} else if(eat(Tokens::TOK_KEY_FOR)) {
@@ -93,7 +93,7 @@ namespace Tokenparser {
 
 	int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token) {
 		while(true) {
-			int cons = proc(parent, false);
+			int cons = proc(parent, false, false);
 			if(cons == 1)
 				return 0;
 			else if(cons == 2) break;

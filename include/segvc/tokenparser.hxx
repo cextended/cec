@@ -46,7 +46,7 @@ namespace Tokenparser {
 		std::shared_ptr<BlockStatement> leadingBlock = nullptr
 	);
 
-        int proc(std::shared_ptr<BlockStatement> parent, const bool _inline = true);
+        int proc(std::shared_ptr<BlockStatement> parent, const bool _inline = true, const bool subscope = false);
         int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token = Tokens::TOK_SYS_EOF);
 	int proc();
 }
