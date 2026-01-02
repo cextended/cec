@@ -38,7 +38,6 @@ enum class OPE {
 	INCA, // x++
 	DECB, // --x
 	DECA, // x--
-	FUNCALL, // f(...),
 	TYPECAST, // (typename)x
 
 	COMMA // <Expression>, <Expression>       see: https://en.wikipedia.org/wiki/Comma_operator
@@ -70,7 +69,6 @@ struct TupleExpression : public Expression {
 struct UnaryExpression : public Expression {
         ExprPtr te;
         OPE op;
-	std::shared_ptr<TupleExpression> tuple;
 	ExprPtr param;
 
         UnaryExpression(ExprPtr te, OPE op);
@@ -133,6 +131,15 @@ struct SubscriptExpression : public Expression {
         void accept(ExpressionVisitor& v) override;
 };
 
+struct FunctionCallExpression : public Expression {
+	ExprPtr function;
+	std::shared_ptr<TupleExpression> params;
+
+	FunctionCallExpression(ExprPtr func, std::shared_ptr<TupleExpression> params);
+
+	void accept(ExpressionVisitor& v) override;
+};
+
 struct Statement {
 	virtual ~Statement() = default;
 	virtual void accept(ExpressionVisitor& v) = 0;
@@ -145,7 +152,6 @@ enum DeclarationType {
 	CONST,
 	STATIC
 };
-
 
 struct DeclarationStatement : Statement {
 	std::string name;
@@ -234,6 +240,7 @@ struct ExpressionVisitor {
 	virtual void visit(VariableExpression &e) = 0;
 	virtual void visit(MemberExpression &e) = 0;
 	virtual void visit(SubscriptExpression &e) = 0;
+	virtual void visit(FunctionCallExpression &e) = 0;
 
 	virtual void visit(DeclarationStatement &s) = 0;
 	virtual void visit(MultipleDeclarationStatement &s) = 0;
