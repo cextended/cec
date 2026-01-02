@@ -38,29 +38,21 @@ namespace Tokenparser {
 
 
 			return var_expr;
-		}
-
-		if(eat(Tokens::TOK_DEL_PARANL))
+		} else if(eat(Tokens::TOK_DEL_PARANL))
 			return eval(Tokens::TOK_DEL_PARANR);
-
-		if(eat(Tokens::TOK_DEL_SBRACL))
+		else if(eat(Tokens::TOK_DEL_SBRACL))
 			return eval_tuple(Tokens::TOK_DEL_SBRACR);
-
-		if(c_token.ttype == Tokens::TOK_STRING_LITERAL) {
+		else if(c_token.ttype == Tokens::TOK_STRING_LITERAL) {
 			std::string name = c_token.name;
 			eat(Tokens::TOK_STRING_LITERAL);
 
 			return std::make_shared<LiteralExpression>(LIT_STRING, name);
-		}
-
-		if(c_token.ttype == Tokens::TOK_NUMBER_LITERAL) {
+		} else if(c_token.ttype == Tokens::TOK_NUMBER_LITERAL) {
 			std::string name = c_token.name;
 			eat(Tokens::TOK_NUMBER_LITERAL);
 
 			return std::make_shared<LiteralExpression>(LIT_NUMBER, name);
-		}
-
-		if(c_token.ttype == Tokens::TOK_CHAR_LITERAL) {
+		} else if(c_token.ttype == Tokens::TOK_CHAR_LITERAL) {
 			std::string name = c_token.name;
 			eat(Tokens::TOK_CHAR_LITERAL);
 
