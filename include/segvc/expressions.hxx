@@ -31,11 +31,6 @@ enum class OPE {
 	ADDR, // &x
 	DEREF, // *x
 
-	MEM, // x.y
-	MEMP, // x->y
-	MEMA, // x[y]
-
-
 	// Unary Operators
 	NOT, // !
 	NEG, // ~x
