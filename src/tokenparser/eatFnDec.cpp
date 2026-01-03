@@ -40,6 +40,7 @@ namespace Tokenparser {
 			/* error */
 			return 0;
 		}
+		parent->childs.push_back(decStm);
 		return 1;
 	}
 }
