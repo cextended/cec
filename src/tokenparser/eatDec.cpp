@@ -88,14 +88,14 @@ namespace Tokenparser {
 				std::cout << "Must specify variable type for constants!" << std::endl;
 			}
 
-			if(master_assign)
-				if(initializer) {
+			if(master_assign) {
+				if(initializer)
 					/* warning */
 					// Some variables has already been assigned!
-					std::cout << "This variables has already been assigned!" << std::endl;
-				} else
-					mulDecStm->list.push_back(decStm);
-			else {
+					std::cout << "Warning: This variables has already been assigned!" << std::endl;
+				mulDecStm->initializer = master_assign;
+				mulDecStm->list.push_back(decStm);
+			} else {
 				decStm->initializer = initializer;
 	                        parent->childs.push_back(decStm);
 			}
