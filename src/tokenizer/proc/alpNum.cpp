@@ -36,8 +36,10 @@ namespace Tokenizer {
 			name == "i128" ||
 			name == "f128" ||
 
-			name == "bool" ||
-			name == "void"
+			name == "usize" ||
+			name == "isize" ||
+
+			name == "bool"
 		)
 			type = Tokens::TOK_TYPE;
 		else if(name == "struct")
