@@ -1,6 +1,10 @@
 #pragma once
 #include <segvc/expressions.hxx>
 struct ExpressionVisitor {
+
+	virtual void begin() = 0;
+	virtual void end() = 0;
+
 	virtual void visit(BinaryExpression &e) = 0;
 	virtual void visit(TupleExpression &e) = 0;
 	virtual void visit(UnaryExpression &e) = 0;
