@@ -46,7 +46,6 @@ enum {
 	VAR_POINTER,
 	VAR_ARRAY,
 	VAR_FUN,
-	VAR_DEC
 };
 
 enum {
