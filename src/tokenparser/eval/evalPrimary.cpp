@@ -50,10 +50,10 @@ namespace Tokenparser {
 					c_token.ttype == Tokens::TOK_IDENTIFIER ||
 					c_token.ttype == Tokens::TOK_NUMBER_LITERAL // This would be used to get tuple elements and it's going to evaulated at compile time
 				) {
-					ExprPtr member = std::make_shared<VariableExpression>(c_token.name);
+					std::string member_name = c_token.name;
 					eat(c_token.ttype);
 
-					auto sexpr = std::make_shared<MemberExpression>(member, main_expr); // We must put them vise versa because of hierarchy things...
+					auto sexpr = std::make_shared<MemberExpression>(main_expr, member_name);
 					sexpr->isPointer = isPointer;
 					main_expr = sexpr;
 					continue;
