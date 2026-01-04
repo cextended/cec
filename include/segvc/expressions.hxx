@@ -122,7 +122,6 @@ struct MemberExpression : public VariableExpression {
  *     map["foo"] = bar
  */
 struct SubscriptExpression : public Expression {
-	bool isPointer;
 	ExprPtr parent;
 	ExprPtr index;
 
