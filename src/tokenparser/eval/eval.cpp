@@ -16,4 +16,45 @@ namespace Tokenparser {
 
 		return main_expr;
 	}
+
+	eval_order_t eval_orders[] {
+		{
+			evalBinaryRightToLeft,
+			{{
+			Tokens::TOK_ASSIGN, OPE::ASSIGN
+			}}
+		},
+		{
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_PLUS, OPE::ADD},
+				{Tokens::TOK_MINUS, OPE::SUB}
+			},
+		},
+		{
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_STAR, OPE::MUL},
+				{Tokens::TOK_SLASH, OPE::DIV}
+			},
+		},
+		{
+			evalUnaryPrefix,
+			{
+				{Tokens::TOK_INC, OPE::INCB},
+				{Tokens::TOK_DEC, OPE::INCB}
+			}
+		},
+		{
+			evalUnaryPostfix,
+			{
+				{Tokens::TOK_INC, OPE::INCA},
+				{Tokens::TOK_DEC, OPE::INCA}
+			}
+		},
+		{
+			evalPrimary,
+			{}
+		}
+	};
 }
