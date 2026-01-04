@@ -53,7 +53,7 @@ namespace Tokenparser {
 					ExprPtr member = std::make_shared<VariableExpression>(c_token.name);
 					eat(c_token.ttype);
 
-					auto sexpr = std::make_shared<SubscriptExpression>(member, main_expr); // We must put them vise versa because of hierarchy things...
+					auto sexpr = std::make_shared<MemberExpression>(member, main_expr); // We must put them vise versa because of hierarchy things...
 					sexpr->isPointer = isPointer;
 					main_expr = sexpr;
 					continue;
