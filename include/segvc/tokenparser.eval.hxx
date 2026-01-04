@@ -10,5 +10,6 @@ namespace Tokenparser {
 	DEFINE_EVAL(0)
 	DEFINE_EVAL(1)
 	DEFINE_EVAL(2)
-	DEFINE_EVAL(3)
+
+	ExprPtr evalUnary();
 }

@@ -2,17 +2,17 @@
 
 namespace Tokenparser {
 
-	ExprPtr eval3() {
+	ExprPtr evalUnary() {
 		if(eat(Tokens::TOK_INC)) {
 
-			ExprPtr main_expr = eval3();
+			ExprPtr main_expr = evalUnary();
 
 			if(!main_expr) return 0; /* Error */
 
 			return std::make_shared<UnaryExpression>(main_expr, OPE::INCB);
 		} else if(eat(Tokens::TOK_DEC)) {
 
-			ExprPtr main_expr = eval3();
+			ExprPtr main_expr = evalUnary();
 
 			if(!main_expr) return 0; /* Error */
 

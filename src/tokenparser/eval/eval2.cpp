@@ -2,7 +2,7 @@
 
 namespace Tokenparser {
 	ExprPtr eval2() {
-		ExprPtr main_expr = eval3();
+		ExprPtr main_expr = evalUnary();
 		if(!main_expr) return 0;
 
 		while(true) {
@@ -10,17 +10,17 @@ namespace Tokenparser {
 				main_expr = std::make_shared<BinaryExpression>(
 							main_expr,
 							OPE::MUL,
-							eval3());
+							evalUnary());
 			else if(eat(Tokens::TOK_SLASH))
 				main_expr = std::make_shared<BinaryExpression>(
 							main_expr,
 							OPE::DIV,
-							eval3());
+							evalUnary());
 			else if(eat(Tokens::TOK_MOD))
 				main_expr = std::make_shared<BinaryExpression>(
 							main_expr,
 							OPE::MOD,
-							eval3());
+							evalUnary());
 			else break;
 		}
 		return main_expr;
