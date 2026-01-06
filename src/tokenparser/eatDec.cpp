@@ -65,10 +65,7 @@ namespace Tokenparser {
 		int index=0;
 
 		std::shared_ptr<MultipleDeclarationStatement> mulDecStm = std::make_shared<MultipleDeclarationStatement>();
-		if(mulDecStm->initializer = master_assign) {
-			mulDecStm = std::make_shared<MultipleDeclarationStatement>();
-			parent->childs.push_back(mulDecStm);
-		}
+		mulDecStm->initializer = master_assign;
 
 		for(auto [var_name, typer, initializer]: var_list) {
 			if(master_typer) {
@@ -100,6 +97,9 @@ namespace Tokenparser {
 	                        parent->childs.push_back(decStm);
 			}
 		}
+
+		if(mulDecStm->initializer = master_assign)
+			parent->childs.push_back(mulDecStm);
 
 		return 1;
 	}
