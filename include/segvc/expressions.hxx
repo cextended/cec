@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <segvc/typer.hxx>
+#include <segvc/irvalue.hxx>
 
 enum class OPE {
 	ADD,
@@ -44,10 +45,11 @@ enum class OPE {
 };
 
 struct ExpressionVisitor;
+struct StatementVisitor;
 
 struct Expression {
 	virtual ~Expression() = default;
-	virtual void accept(ExpressionVisitor& v) = 0;
+	virtual std::unique_ptr<IRValue> accept(ExpressionVisitor& v) = 0;
 };
 
 using ExprPtr = std::shared_ptr<Expression>;
@@ -58,12 +60,12 @@ struct BinaryExpression : public Expression {
 
 	BinaryExpression(ExprPtr left, OPE op, ExprPtr right);
 
-	void accept(ExpressionVisitor& v) override;
+	std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 struct TupleExpression : public Expression {
 	std::vector<ExprPtr> expressions;
-	void accept(ExpressionVisitor& v) override;
+	std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 struct UnaryExpression : public Expression {
@@ -73,7 +75,7 @@ struct UnaryExpression : public Expression {
 
         UnaryExpression(ExprPtr te, OPE op);
 
-        void accept(ExpressionVisitor& v) override;
+        std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 enum {
@@ -88,7 +90,7 @@ struct LiteralExpression : public Expression {
 
 	LiteralExpression(int ltype, std::string value);
 
-        void accept(ExpressionVisitor& v) override;
+        std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 struct VariableExpression : public Expression {
@@ -96,7 +98,7 @@ struct VariableExpression : public Expression {
 
 	VariableExpression(std::string name);
 
-        void accept(ExpressionVisitor& v) override;
+        std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 
@@ -112,7 +114,7 @@ struct MemberExpression : public VariableExpression {
 
 	MemberExpression(ExprPtr parent, std::string name);
 
-        void accept(ExpressionVisitor& v) override;
+        std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 /**
@@ -127,7 +129,7 @@ struct SubscriptExpression : public Expression {
 
 	SubscriptExpression(ExprPtr parent, ExprPtr index);
 
-        void accept(ExpressionVisitor& v) override;
+        std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 struct FunctionCallExpression : public Expression {
@@ -136,12 +138,12 @@ struct FunctionCallExpression : public Expression {
 
 	FunctionCallExpression(ExprPtr func, std::shared_ptr<TupleExpression> params);
 
-	void accept(ExpressionVisitor& v) override;
+	std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
 struct Statement {
 	virtual ~Statement() = default;
-	virtual void accept(ExpressionVisitor& v) = 0;
+	virtual void accept(StatementVisitor& v) = 0;
 };
 
 using StmPtr = std::shared_ptr<Statement>;
@@ -158,20 +160,20 @@ struct DeclarationStatement : Statement {
 	std::shared_ptr<Typer> type_spec;
 	ExprPtr initializer;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct MultipleDeclarationStatement : Statement {
 	std::vector< std::shared_ptr<DeclarationStatement> > list;
 	ExprPtr initializer;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct BlockStatement : public Statement {
 	std::vector<StmPtr> childs;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct FunctionDeclarationStatement : Statement {
@@ -180,20 +182,20 @@ struct FunctionDeclarationStatement : Statement {
         std::shared_ptr<Typer> type_spec;
         std::shared_ptr<BlockStatement> body;
 
-        void accept(ExpressionVisitor& v) override;
+        void accept(StatementVisitor& v) override;
 };
 
 struct ExpressionStatement : public Statement {
 	ExprPtr expr;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct IfStatement : public Statement {
 	ExprPtr condition;
 	StmPtr body;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct WhileStatement : public IfStatement {
@@ -201,7 +203,7 @@ struct WhileStatement : public IfStatement {
 
 	StmPtr lead, body, trail;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct BasicForStatement : public Statement {
@@ -209,24 +211,24 @@ struct BasicForStatement : public Statement {
 
 	StmPtr lead, body, trail;
 
-	virtual void accept(ExpressionVisitor& v) override = 0;
+	virtual void accept(StatementVisitor& v) override = 0;
 };
 
 struct ForStatement : public BasicForStatement {
 	ExprPtr condition;
 	StmPtr update;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct ForEachStatement : public BasicForStatement {
 	ExprPtr iterable;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
 
 struct ReturnStatement : public Statement {
 	ExprPtr expr;
 
-	void accept(ExpressionVisitor& v) override;
+	void accept(StatementVisitor& v) override;
 };
