@@ -20,6 +20,7 @@ enum class OPE {
 	TER, // ternary, x ? 1 : 0
 
 	EQEQ,
+	NEQ,
 	AND,
 	OR,
 	ANDAND,
@@ -58,7 +59,8 @@ enum class OPE {
 	INCA, // x++
 	DECB, // --x
 	DECA, // x--
-	TYPECAST, // (typename)x
+	POSITIVE, // +x
+	NEGATIVE, // -x
 
 	COMMA // <Expression>, <Expression>       see: https://en.wikipedia.org/wiki/Comma_operator
 };
