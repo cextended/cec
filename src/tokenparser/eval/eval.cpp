@@ -20,22 +20,103 @@ namespace Tokenparser {
 	eval_order_t eval_orders[] {
 		{
 			evalBinaryRightToLeft,
-			{{
-			Tokens::TOK_ASSIGN, OPE::ASSIGN
-			}}
+			{
+				{Tokens::TOK_ASSIGN, OPE::ASSIGN},
+				{Tokens::TOK_ASSIGN_PLUS, OPE::ASSADD },
+				{Tokens::TOK_ASSIGN_SUB,  OPE::ASSSUB },
+				{Tokens::TOK_ASSIGN_MUL,  OPE::ASSMUL },
+				{Tokens::TOK_ASSIGN_DIV,  OPE::ASSDIV },
+				{Tokens::TOK_ASSIGN_MOD,  OPE::ASSMOD },
+				{Tokens::TOK_ASSIGN_AND,  OPE::ASSAND },
+				{Tokens::TOK_ASSIGN_OR,   OPE::ASSOR  },
+				{Tokens::TOK_ASSIGN_XOR,  OPE::ASSXOR },
+				{Tokens::TOK_ASSIGN_SHL,  OPE::ASSSHL },
+				{Tokens::TOK_ASSIGN_SHR,  OPE::ASSSHR },
+				{Tokens::TOK_ASSIGN_SWAP, OPE::ASSSWAP}
+			}
 		},
-		{
+
+		// TODO: Going to add a special ternary evaulator dunction here
+
+		{ // OP: ||
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_OR, OPE::OROR}
+			},
+		},
+		{ // OP: &&
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_AND, OPE::ANDAND}
+			},
+		},
+
+
+		{ // OP: |
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_BIT_OR, OPE::OR}
+			},
+		},
+		{ // OP: ^
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_XOR, OPE::XOR}
+			},
+		},
+		{ // OP: &
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_BIT_AND, OPE::AND}
+			},
+		},
+
+
+		{ // OP: ==
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_EQEQ, OPE::EQEQ}
+			},
+		},
+		{ // OP: !=
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_NEQ, OPE::NEQ}
+			},
+		},
+
+
+		{ // OP: COMPARE
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_OP_LT,  OPE::COMLT  }, // <
+				{Tokens::TOK_OP_RT,  OPE::COMRT  }, // >
+				{Tokens::TOK_OP_LTE, OPE::COMLTE }, // <=
+				{Tokens::TOK_OP_RTE, OPE::COMRTE }  // >=
+			},
+		},
+
+		{ // OP: BIT SHIFT
+			evalBinaryLeftToRight,
+			{
+				{Tokens::TOK_SHL,  OPE::SHIFTL  }, // <<
+				{Tokens::TOK_SHR,  OPE::SHIFTR  }, // >>
+			},
+		},
+
+		{ // OP: ADD, SUB
 			evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_PLUS, OPE::ADD},
 				{Tokens::TOK_MINUS, OPE::SUB}
 			},
 		},
-		{
+		{ // OP: MUL, DIV, MOD
 			evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_STAR, OPE::MUL},
 				{Tokens::TOK_SLASH, OPE::DIV}
+				{Tokens::TOK_MOD, OPE::MOD}
 			},
 		},
 		{
