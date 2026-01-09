@@ -3,10 +3,6 @@
 #include <segvc/irvalue.hxx>
 
 struct ExpressionVisitor {
-
-	virtual std::unique_ptr<IRValue> begin() = 0;
-	virtual std::unique_ptr<IRValue> end() = 0;
-
 	virtual std::unique_ptr<IRValue> visit(BinaryExpression &e) = 0;
 	virtual std::unique_ptr<IRValue> visit(TupleExpression &e) = 0;
 	virtual std::unique_ptr<IRValue> visit(UnaryExpression &e) = 0;
@@ -18,9 +14,6 @@ struct ExpressionVisitor {
 };
 
 struct StatementVisitor {
-	virtual void begin() = 0;
-	virtual void end() = 0;
-
 	virtual void visit(DeclarationStatement &s) = 0;
 	virtual void visit(MultipleDeclarationStatement &s) = 0;
 	virtual void visit(BlockStatement &s) = 0;
