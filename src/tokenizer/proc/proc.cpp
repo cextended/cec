@@ -9,6 +9,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	bool isSymbol(const char &c);
 
@@ -132,4 +134,6 @@ namespace Tokenizer {
 		}
 		return false;
 	}
+}
+
 }

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+namespace segvc {
+
 inline void unrecognizedTokenError(std::string file, size_t line, size_t column, std::string lines) {
         std::cerr << "In " << file << ";" << std::endl;
         std::cerr << "Unrecognized token at:" << line << ":" << column << std::endl;
@@ -29,4 +31,6 @@ inline void unclosedSquareBracketsError(Token &t) {
 
 inline void moreThanOneIdentifiersError(Token &t) {
 	std::cerr << "More than one identifiers ' " << t.name << " ' at:" << t.line << ":" << t.column << std::endl;
+}
+
 }

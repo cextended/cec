@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	int eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll) {
 		while(1) {
@@ -60,4 +62,6 @@ namespace Tokenparser {
 
 		return c_typer->vtype;
 	};
+}
+
 }

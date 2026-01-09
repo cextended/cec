@@ -1,5 +1,7 @@
 #pragma once
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	ExprPtr eval_single(Tokens::Type till);
@@ -23,4 +25,6 @@ namespace Tokenparser {
 		auto order = eval_orders[index];
 		return order.eval_func(order.bindings, index);
 	}
+}
+
 }

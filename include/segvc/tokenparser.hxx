@@ -6,6 +6,8 @@
 #include<segvc/expressions.hxx>
 #include<segvc/tokenparser.eval.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	extern DataPipe<Token> *_input_pipe;
@@ -49,4 +51,6 @@ namespace Tokenparser {
         int proc(std::shared_ptr<BlockStatement> parent, const bool _inline = true, const bool subscope = false);
         int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token = Tokens::TOK_SYS_EOF);
 	int proc();
+}
+
 }

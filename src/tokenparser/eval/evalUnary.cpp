@@ -1,5 +1,7 @@
 #include <segvc/tokenparser.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	ExprPtr evalUnaryPrefix(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
@@ -30,4 +32,6 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
+}
+
 }

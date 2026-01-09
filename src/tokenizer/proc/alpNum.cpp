@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	void procAlpNum(Token& arg) {
 		const std::string& name = arg.name;
@@ -104,4 +106,6 @@ namespace Tokenizer {
 
 		arg.ttype = type;
 	};
+}
+
 }

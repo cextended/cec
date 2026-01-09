@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	int eat(Tokens::Type ttype) { // return 1 if match, 0 if not match
 
@@ -29,4 +31,6 @@ namespace Tokenparser {
 
 		return 0;
 	}
+}
+
 }

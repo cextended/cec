@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	void use(std::istream &input_stream) {
 		_input_stream = &input_stream;
@@ -16,4 +18,6 @@ namespace Tokenizer {
 	void use(DataPipe<Token> &output_pipe) {
 		_output_pipe = &output_pipe;
 	}
+}
+
 }

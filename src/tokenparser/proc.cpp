@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	/*
@@ -111,4 +113,6 @@ namespace Tokenparser {
 		*_input_pipe >> c_token;
 		return proc_body(stm_root);
 	}
+}
+
 }

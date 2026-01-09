@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	Token readSymbol(std::istream& in) {
 		Token tok;
@@ -86,4 +88,6 @@ namespace Tokenizer {
 
 		return tok;
 	}
+}
+
 }

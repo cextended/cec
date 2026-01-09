@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	int eatFnDec(
 		std::shared_ptr<BlockStatement> parent,
@@ -43,4 +45,6 @@ namespace Tokenparser {
 		parent->childs.push_back(decStm);
 		return 1;
 	}
+}
+
 }

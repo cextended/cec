@@ -3,6 +3,8 @@
 #include<segvc/util/datapipe.hxx>
 #include<segvc/tokens.hxx>
 
+namespace segvc {
+
 namespace Tokenizer {
 
 	extern size_t line, line_beg;
@@ -23,4 +25,6 @@ namespace Tokenizer {
 	Token readChar(std::istream& in);
 	Token readString(std::istream& in);
 	Token readSymbol(std::istream& in);
+}
+
 }

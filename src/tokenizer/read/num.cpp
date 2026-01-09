@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	inline int toNumber(int c) {
 		if(c >= '0' && c <= '9')
@@ -88,4 +90,6 @@ namespace Tokenizer {
 
 	        return tok;
 	}
+}
+
 }

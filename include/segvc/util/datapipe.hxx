@@ -4,6 +4,8 @@
 #include <condition_variable>
 #include<mutex>
 
+namespace segvc {
+
 template<typename T>
 struct DataPipe {
 
@@ -37,3 +39,5 @@ struct DataPipe {
 	}
 
 };
+
+}

@@ -1,5 +1,7 @@
 #include <segvc/tokenparser.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	ExprPtr eval(Tokens::Type till) {
 		ExprPtr main_expr = eval_single(Tokens::TOK_SYS_SKIP);
@@ -142,4 +144,6 @@ namespace Tokenparser {
 			{}
 		}
 	};
+}
+
 }

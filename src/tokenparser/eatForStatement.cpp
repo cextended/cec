@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	int eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
 		std::shared_ptr<BasicForStatement> stmRet;
@@ -63,4 +65,6 @@ namespace Tokenparser {
 		parent->childs.push_back(stmRet);
 		return 1;
 	}
+}
+
 }

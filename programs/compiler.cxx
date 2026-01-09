@@ -8,6 +8,7 @@
 
 #include <segvc/tokenizer.hxx>
 #include <segvc/tokenparser.hxx>
+
 /*
 inline
 std::string getExecutablePath() {
@@ -50,17 +51,17 @@ int main(int argc, char *argv[]) {
 	else
 		ins = new std::ifstream(in);
 
-	Tokenizer::use(*ins);
+	segvc::Tokenizer::use(*ins);
 
-	DataPipe<Token> lex2par;
-	Tokenizer::use(lex2par);
-	Tokenparser::use(lex2par);
+	segvc::DataPipe<segvc::Token> lex2par;
+	segvc::Tokenizer::use(lex2par);
+	segvc::Tokenparser::use(lex2par);
 
-	std::shared_ptr<BlockStatement> stm_root = std::make_shared<BlockStatement>();
-	Tokenparser::use(stm_root);
+	std::shared_ptr<segvc::BlockStatement> stm_root = std::make_shared<segvc::BlockStatement>();
+	segvc::Tokenparser::use(stm_root);
 
-	std::thread lexTh(static_cast<int(*)()>(Tokenizer::proc));
-	std::thread parTh(static_cast<int(*)()>(Tokenparser::proc));
+	std::thread lexTh(static_cast<int(*)()>(segvc::Tokenizer::proc));
+	std::thread parTh(static_cast<int(*)()>(segvc::Tokenparser::proc));
 
 	lexTh.join();
 	parTh.join();

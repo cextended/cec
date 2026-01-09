@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	void procSymbol(Token& arg) {
 		const std::string& name = arg.name;
@@ -109,4 +111,6 @@ namespace Tokenizer {
 
 		arg.ttype = type;
 	}
+}
+
 }

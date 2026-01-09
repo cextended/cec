@@ -7,6 +7,8 @@
 #include <segvc/typer.hxx>
 #include <segvc/irvalue.hxx>
 
+namespace segvc {
+
 enum class OPE {
 	ADD,
 	SUB,
@@ -253,3 +255,5 @@ struct ReturnStatement : public Statement {
 
 	void accept(StatementVisitor& v) override;
 };
+
+}

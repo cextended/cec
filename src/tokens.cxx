@@ -2,6 +2,8 @@
 #include<cstdint>
 #include<vector>
 
+namespace segvc {
+
 std::istream* operator>>(std::istream *in, Token &t) {
 	uint32_t name_len;
 	in->read(reinterpret_cast<char*>(&name_len), sizeof(name_len));
@@ -42,4 +44,6 @@ std::ostream* operator<<(std::ostream *out, Token &t) {
 	out->write(reinterpret_cast<const char*>(&t.endOffset), sizeof(t.endOffset));
 	out->write(reinterpret_cast<const char*>(&t.isSynthetic), sizeof(t.isSynthetic));
 	return out;
+}
+
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdint>
 
+namespace segvc {
+
 enum {
 	VAR_UNDEFINED=0,
 
@@ -70,3 +72,4 @@ struct Typer {
 	std::vector<StmPtr> func_params;
 };
 
+}

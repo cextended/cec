@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+namespace segvc {
+
 namespace Tokens {
 
 typedef enum {
@@ -134,3 +136,5 @@ struct Token {
 
 std::istream* operator>>(std::istream* in, Token &t);
 std::ostream* operator<<(std::ostream* out, Token &t);
+
+}

@@ -1,5 +1,7 @@
 #include <segvc/tokenparser.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	ExprPtr evalPrimary(std::vector< std::pair<Tokens::Type, OPE>>&, int) {
@@ -66,4 +68,6 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
+}
+
 }

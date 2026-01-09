@@ -1,6 +1,8 @@
 #include <segvc/astvisitor.hxx>
 #include <segvc/expressions.hxx>
 
+namespace segvc {
+
 BinaryExpression::BinaryExpression(ExprPtr left, OPE op, ExprPtr right) : left(left), op(op), right(right) {}
 UnaryExpression::UnaryExpression(ExprPtr te, OPE op) : te(te), op(op) {}
 LiteralExpression::LiteralExpression(int ltype, std::string value) : ltype(ltype), value(value) {}
@@ -28,3 +30,5 @@ void WhileStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void ForStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void ForEachStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void ReturnStatement::accept(StatementVisitor& v) { v.visit(*this); }
+
+}

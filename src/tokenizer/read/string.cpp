@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	Token readString(std::istream& in) {
 		size_t start_index = static_cast<size_t>(in.tellg());
@@ -59,4 +61,6 @@ namespace Tokenizer {
 
 		return tok;
 	}
+}
+
 }

@@ -1,5 +1,7 @@
 #include <segvc/tokenparser.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	std::shared_ptr<TupleExpression> eval_tuple(Tokens::Type till) {
 		std::shared_ptr<TupleExpression> tuple = std::make_shared<TupleExpression>();
@@ -16,4 +18,6 @@ namespace Tokenparser {
 
 		return tuple;
 	}
+}
+
 }

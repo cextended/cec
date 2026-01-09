@@ -2,6 +2,7 @@
 #include <segvc/expressions.hxx>
 #include <segvc/irvalue.hxx>
 
+namespace segvc {
 struct ExpressionVisitor {
 	virtual std::unique_ptr<IRValue> visit(BinaryExpression &e) = 0;
 	virtual std::unique_ptr<IRValue> visit(TupleExpression &e) = 0;
@@ -25,3 +26,5 @@ struct StatementVisitor {
 	virtual void visit(ForEachStatement &s) = 0;
 	virtual void visit(ReturnStatement &s) = 0;
 };
+
+}

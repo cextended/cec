@@ -1,5 +1,7 @@
 #include <segvc/tokenparser.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 
 	ExprPtr evalBinaryLeftToRight(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
@@ -38,4 +40,6 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
+}
+
 }

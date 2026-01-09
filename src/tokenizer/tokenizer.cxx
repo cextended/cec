@@ -8,6 +8,8 @@
 #include <iostream>
 #include <unordered_map>
 
+namespace segvc {
+
 namespace Tokenizer {
 	size_t line, line_beg;
 
@@ -17,4 +19,6 @@ namespace Tokenizer {
 	DataPipe<Token> *_output_pipe;
 
 	std::string current_file;
+}
+
 }

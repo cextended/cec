@@ -2,6 +2,8 @@
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
 
+namespace segvc {
+
 namespace Tokenparser {
 	uint8_t getPVarT(const std::string& str) {
 		if(str == "u1")
@@ -54,4 +56,6 @@ namespace Tokenparser {
 
 		return VAR_UNDEFINED;
 	}
+}
+
 }
