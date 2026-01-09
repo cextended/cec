@@ -28,6 +28,25 @@ enum class OPE {
 	XOR,
 
 	ASSIGN, // =
+	ASSADD, // +=
+	ASSSUB, // -=
+	ASSMUL, // *=
+	ASSDIV, // /=
+	ASSMOD, // %=
+	ASSAND, // &=
+	ASSOR,  // |=
+	ASSXOR, // ^=
+	ASSSHL, // <<=
+	ASSSHR, // >>=
+	ASSSWAP,// <>
+
+	SHIFTL, // <<
+	SHIFTR, // >>
+
+	COMLT,  // <
+	COMRT,  // >
+	COMLTE, // <=
+	COMRTE, // >=
 
 	ADDR, // &x
 	DEREF, // *x
