@@ -23,7 +23,7 @@ namespace Tokenparser {
 			{
 				{Tokens::TOK_ASSIGN, OPE::ASSIGN},
 				{Tokens::TOK_ASSIGN_PLUS, OPE::ASSADD },
-				{Tokens::TOK_ASSIGN_SUB,  OPE::ASSSUB },
+				{Tokens::TOK_ASSIGN_MINUS,  OPE::ASSSUB },
 				{Tokens::TOK_ASSIGN_MUL,  OPE::ASSMUL },
 				{Tokens::TOK_ASSIGN_DIV,  OPE::ASSDIV },
 				{Tokens::TOK_ASSIGN_MOD,  OPE::ASSMOD },
@@ -115,18 +115,22 @@ namespace Tokenparser {
 			evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_STAR, OPE::MUL},
-				{Tokens::TOK_SLASH, OPE::DIV}
+				{Tokens::TOK_SLASH, OPE::DIV},
 				{Tokens::TOK_MOD, OPE::MOD}
 			},
 		},
-		{
+
+		// TODO: going'to create another special evualator function because we need to add type cast as well
+		{ // OP: Unary prefix
 			evalUnaryPrefix,
 			{
 				{Tokens::TOK_INC, OPE::INCB},
-				{Tokens::TOK_DEC, OPE::INCB}
+				{Tokens::TOK_DEC, OPE::DECB},
+				{Tokens::TOK_PLUS, OPE::POSITIVE},
+				{Tokens::TOK_MINUS, OPE::NEGATIVE}
 			}
 		},
-		{
+		{ // OP: Unary postfix
 			evalUnaryPostfix,
 			{
 				{Tokens::TOK_INC, OPE::INCA},
