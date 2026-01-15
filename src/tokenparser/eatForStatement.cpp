@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	int eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
+	int Tokenparser::eatForStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
 		std::shared_ptr<BasicForStatement> stmRet;
 		std::shared_ptr<BlockStatement> decs = std::make_shared<BlockStatement>();
 		if(!eatDec(decs, DeclarationType::UNDEFINED)) {
@@ -65,6 +64,5 @@ namespace Tokenparser {
 		parent->childs.push_back(stmRet);
 		return 1;
 	}
-}
 
 }

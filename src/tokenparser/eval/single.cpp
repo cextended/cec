@@ -2,8 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	ExprPtr eval_single(Tokens::Type till) {
+	ExprPtr Tokenparser::eval_single(Tokens::Type till) {
 		ExprPtr expr = eval_order_exec(0);
 		if(!eat(till)) {
 			/* Error */
@@ -12,6 +11,4 @@ namespace Tokenparser {
 		}
 		return expr;
 	}
-}
-
 }

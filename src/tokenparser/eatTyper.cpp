@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	int eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll) {
+	int Tokenparser::eatTyper(std::shared_ptr<Typer>& c_typer, bool followAll) {
 		while(1) {
 			if(c_token.ttype == Tokens::TOK_TYPE) {
 				uint8_t vtype = getPVarT(c_token.name);
@@ -62,6 +61,5 @@ namespace Tokenparser {
 
 		return c_typer->vtype;
 	};
-}
 
 }

@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	uint8_t getPVarT(const std::string& str) {
+	uint8_t Tokenparser::getPVarT(const std::string& str) {
 		if(str == "u1")
 			return VAR_U1;
 
@@ -56,6 +55,5 @@ namespace Tokenparser {
 
 		return VAR_UNDEFINED;
 	}
-}
 
 }

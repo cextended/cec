@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	int eatWhileStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
+	int Tokenparser::eatWhileStatement(std::shared_ptr<BlockStatement> parent, std::shared_ptr<BlockStatement> leadingBlock) {
 		std::shared_ptr<WhileStatement> stmRet = std::make_shared<WhileStatement>();
 		stmRet->lead = leadingBlock;
 
@@ -35,6 +34,5 @@ namespace Tokenparser {
 		parent->childs.push_back(stmRet);
 		return 1;
 	}
-}
 
 }

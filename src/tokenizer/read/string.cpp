@@ -10,8 +10,7 @@
 
 namespace segvc {
 
-namespace Tokenizer {
-	Token readString(std::istream& in) {
+	Token Tokenizer::readString(std::istream& in) {
 		size_t start_index = static_cast<size_t>(in.tellg());
 		std::string ret;
 
@@ -61,6 +60,5 @@ namespace Tokenizer {
 
 		return tok;
 	}
-}
 
 }

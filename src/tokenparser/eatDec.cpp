@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	int eatDec(
+	int Tokenparser::eatDec(
 		std::shared_ptr< BlockStatement > parent,
 		DeclarationType dec_type
 	) {
@@ -105,6 +104,5 @@ namespace Tokenparser {
 
 		return 1;
 	}
-}
 
 }

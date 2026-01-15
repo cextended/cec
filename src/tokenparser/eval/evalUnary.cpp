@@ -2,9 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-
-	ExprPtr evalUnaryPrefix(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
+	ExprPtr Tokenparser::evalUnaryPrefix(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
 		for(auto [ttype, op]: bindings)
 			if(eat(ttype)) {
 				ExprPtr main_expr = evalUnaryPrefix(bindings, index);
@@ -17,7 +15,7 @@ namespace Tokenparser {
 		return eval_order_exec(index+1);
 	}
 
-	ExprPtr evalUnaryPostfix(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
+	ExprPtr Tokenparser::evalUnaryPostfix(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
 		ExprPtr main_expr = eval_order_exec(index + 1);
 
 		bool continueIteration=!!main_expr;
@@ -32,6 +30,4 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
-}
-
 }

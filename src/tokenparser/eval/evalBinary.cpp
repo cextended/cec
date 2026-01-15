@@ -2,9 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-
-	ExprPtr evalBinaryLeftToRight(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
+	ExprPtr Tokenparser::evalBinaryLeftToRight(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
 		ExprPtr main_expr = eval_order_exec(index + 1);
 
 		bool continueIteration=!!main_expr;
@@ -25,7 +23,7 @@ namespace Tokenparser {
 		return main_expr;
 	}
 
-	ExprPtr evalBinaryRightToLeft(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
+	ExprPtr Tokenparser::evalBinaryRightToLeft(std::vector< std::pair<Tokens::Type, OPE>> &bindings, int index) {
 		ExprPtr main_expr = eval_order_exec(index + 1);
 		
 		if(main_expr) {
@@ -40,6 +38,5 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
-}
 
 }

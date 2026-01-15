@@ -10,8 +10,7 @@
 
 namespace segvc {
 
-namespace Tokenizer {
-	void procSymbol(Token& arg) {
+	void Tokenizer::procSymbol(Token& arg) {
 		const std::string& name = arg.name;
 		Tokens::Type type;
 		if(name == "(")
@@ -111,6 +110,5 @@ namespace Tokenizer {
 
 		arg.ttype = type;
 	}
-}
 
 }

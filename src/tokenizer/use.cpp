@@ -10,14 +10,12 @@
 
 namespace segvc {
 
-namespace Tokenizer {
-	void use(std::istream &input_stream) {
+	void Tokenizer::use(std::istream &input_stream) {
 		_input_stream = &input_stream;
 	}
 
-	void use(DataPipe<Token> &output_pipe) {
+	void Tokenizer::use(DataPipe<Token> &output_pipe) {
 		_output_pipe = &output_pipe;
 	}
-}
 
 }

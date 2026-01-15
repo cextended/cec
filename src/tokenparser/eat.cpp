@@ -4,8 +4,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	int eat(Tokens::Type ttype) { // return 1 if match, 0 if not match
+	int Tokenparser::eat(Tokens::Type ttype) { // return 1 if match, 0 if not match
 
 		std::string token_name = c_token.name;
 		if(ttype == Tokens::TOK_SYS_EOF)
@@ -31,6 +30,5 @@ namespace Tokenparser {
 
 		return 0;
 	}
-}
 
 }

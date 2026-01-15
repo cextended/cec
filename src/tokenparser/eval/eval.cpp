@@ -2,8 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	ExprPtr eval(Tokens::Type till) {
+	ExprPtr Tokenparser::eval(Tokens::Type till) {
 		ExprPtr main_expr = eval_single(Tokens::TOK_SYS_SKIP);
 		if(main_expr) while(eat(Tokens::TOK_COMMA)) {
 			ExprPtr expr = std::make_shared<BinaryExpression>(main_expr, OPE::COMMA, eval_single(Tokens::TOK_SYS_SKIP));
@@ -19,9 +18,9 @@ namespace Tokenparser {
 		return main_expr;
 	}
 
-	eval_order_t eval_orders[] {
-		{
-			evalBinaryRightToLeft,
+	parser_eval_order_t parser_eval_orders[] {
+		{ // OP: Assignment Operators
+			&Tokenparser::evalBinaryRightToLeft,
 			{
 				{Tokens::TOK_ASSIGN, OPE::ASSIGN},
 				{Tokens::TOK_ASSIGN_PLUS, OPE::ASSADD },
@@ -41,13 +40,13 @@ namespace Tokenparser {
 		// TODO: Going to add a special ternary evaulator dunction here
 
 		{ // OP: ||
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_OR, OPE::OROR}
 			},
 		},
 		{ // OP: &&
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_AND, OPE::ANDAND}
 			},
@@ -55,19 +54,19 @@ namespace Tokenparser {
 
 
 		{ // OP: |
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_BIT_OR, OPE::OR}
 			},
 		},
 		{ // OP: ^
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_XOR, OPE::XOR}
 			},
 		},
 		{ // OP: &
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_BIT_AND, OPE::AND}
 			},
@@ -75,13 +74,13 @@ namespace Tokenparser {
 
 
 		{ // OP: ==
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_EQEQ, OPE::EQEQ}
 			},
 		},
 		{ // OP: !=
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_NEQ, OPE::NEQ}
 			},
@@ -89,7 +88,7 @@ namespace Tokenparser {
 
 
 		{ // OP: COMPARE
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_OP_LT,  OPE::COMLT  }, // <
 				{Tokens::TOK_OP_RT,  OPE::COMRT  }, // >
@@ -99,7 +98,7 @@ namespace Tokenparser {
 		},
 
 		{ // OP: BIT SHIFT
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_SHL,  OPE::SHIFTL  }, // <<
 				{Tokens::TOK_SHR,  OPE::SHIFTR  }, // >>
@@ -107,14 +106,14 @@ namespace Tokenparser {
 		},
 
 		{ // OP: ADD, SUB
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_PLUS, OPE::ADD},
 				{Tokens::TOK_MINUS, OPE::SUB}
 			},
 		},
 		{ // OP: MUL, DIV, MOD
-			evalBinaryLeftToRight,
+			&Tokenparser::evalBinaryLeftToRight,
 			{
 				{Tokens::TOK_STAR, OPE::MUL},
 				{Tokens::TOK_SLASH, OPE::DIV},
@@ -124,7 +123,7 @@ namespace Tokenparser {
 
 		// TODO: going'to create another special evualator function because we need to add type cast as well
 		{ // OP: Unary prefix
-			evalUnaryPrefix,
+			&Tokenparser::evalUnaryPrefix,
 			{
 				{Tokens::TOK_INC, OPE::INCB},
 				{Tokens::TOK_DEC, OPE::DECB},
@@ -133,17 +132,16 @@ namespace Tokenparser {
 			}
 		},
 		{ // OP: Unary postfix
-			evalUnaryPostfix,
+			&Tokenparser::evalUnaryPostfix,
 			{
 				{Tokens::TOK_INC, OPE::INCA},
 				{Tokens::TOK_DEC, OPE::INCA}
 			}
 		},
 		{
-			evalPrimary,
+			&Tokenparser::evalPrimary,
 			{}
 		}
 	};
-}
 
 }

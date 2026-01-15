@@ -51,17 +51,22 @@ int main(int argc, char *argv[]) {
 	else
 		ins = new std::ifstream(in);
 
-	segvc::Tokenizer::use(*ins);
+	segvc::Tokenizer lexer_i;
+	segvc::Tokenparser parser_i;
+
+	lexer_i.use(*ins);
 
 	segvc::DataPipe<segvc::Token> lex2par;
-	segvc::Tokenizer::use(lex2par);
-	segvc::Tokenparser::use(lex2par);
+	lexer_i.use(lex2par);
+	parser_i.use(lex2par);
 
 	std::shared_ptr<segvc::BlockStatement> stm_root = std::make_shared<segvc::BlockStatement>();
-	segvc::Tokenparser::use(stm_root);
+	parser_i.use(stm_root);
 
-	std::thread lexTh(static_cast<int(*)()>(segvc::Tokenizer::proc));
-	std::thread parTh(static_cast<int(*)()>(segvc::Tokenparser::proc));
+	std::thread lexTh(&segvc::Tokenizer::proc, &lexer_i);
+	std::thread parTh(
+		static_cast<int (segvc::Tokenparser::*)()>(&segvc::Tokenparser::proc),
+		&parser_i);
 
 	lexTh.join();
 	parTh.join();

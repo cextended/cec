@@ -2,8 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-	std::shared_ptr<TupleExpression> eval_tuple(Tokens::Type till) {
+	std::shared_ptr<TupleExpression> Tokenparser::eval_tuple(Tokens::Type till) {
 		std::shared_ptr<TupleExpression> tuple = std::make_shared<TupleExpression>();
 		do {
 			ExprPtr expr = eval_single(Tokens::TOK_SYS_SKIP);
@@ -18,6 +17,4 @@ namespace Tokenparser {
 
 		return tuple;
 	}
-}
-
 }

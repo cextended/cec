@@ -10,7 +10,6 @@
 
 namespace segvc {
 
-namespace Tokenizer {
 	inline int toNumber(int c) {
 		if(c >= '0' && c <= '9')
 			return c - '0';
@@ -22,7 +21,7 @@ namespace Tokenizer {
 	}
 
 
-	Token readNum(std::istream& in) {
+	Token Tokenizer::readNum(std::istream& in) {
 		size_t start_index=in.tellg();
 		size_t end_index = 0;
 
@@ -90,6 +89,5 @@ namespace Tokenizer {
 
 	        return tok;
 	}
-}
 
 }

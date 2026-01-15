@@ -10,8 +10,7 @@
 
 namespace segvc {
 
-namespace Tokenizer {
-	void procAlpNum(Token& arg) {
+	void Tokenizer::procAlpNum(Token& arg) {
 		const std::string& name = arg.name;
 		Tokens::Type type;
 		if(
@@ -106,6 +105,5 @@ namespace Tokenizer {
 
 		arg.ttype = type;
 	};
-}
 
 }

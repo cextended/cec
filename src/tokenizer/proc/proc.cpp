@@ -11,10 +11,9 @@
 
 namespace segvc {
 
-namespace Tokenizer {
 	bool isSymbol(const char &c);
 
-	int proc() {
+	int Tokenizer::proc() {
 		std::istream& in = *_input_stream;
 
 		line_beg = 0;
@@ -134,6 +133,5 @@ namespace Tokenizer {
 		}
 		return false;
 	}
-}
 
 }

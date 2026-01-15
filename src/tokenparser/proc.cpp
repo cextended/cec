@@ -4,15 +4,13 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-
 	/*
 	* Return values and their meanings:
 	*   0 : No catch
 	*   1 : Problem caught
 	*   2 : Finish
 	*/
-	int proc(std::shared_ptr<BlockStatement> parent, const bool _inline, const bool subscope) {
+	int Tokenparser::proc(std::shared_ptr<BlockStatement> parent, const bool _inline, const bool subscope) {
 		if(subscope && eat(Tokens::TOK_DEL_CBRACL)) {
 			if(proc_body(parent, Tokens::TOK_DEL_CBRACR)) return 1;
 			return 0;
@@ -93,7 +91,7 @@ namespace Tokenparser {
 		return 2;
 	}
 
-	int proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token) {
+	int Tokenparser::proc_body(std::shared_ptr<BlockStatement> parent, Tokens::Type end_token) {
 		while(true) {
 			int cons = proc(parent, false, false);
 			if(cons == 1)
@@ -108,11 +106,10 @@ namespace Tokenparser {
 		return 0;
 	}
 
-	int proc() {
+	int Tokenparser::proc() {
 		if(!_input_pipe || !stm_root) return 1;
 		*_input_pipe >> c_token;
+
 		return proc_body(stm_root);
 	}
-}
-
 }

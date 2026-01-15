@@ -2,9 +2,7 @@
 
 namespace segvc {
 
-namespace Tokenparser {
-
-	ExprPtr evalPrimary(std::vector< std::pair<Tokens::Type, OPE>>&, int) {
+	ExprPtr Tokenparser::evalPrimary(std::vector< std::pair<Tokens::Type, OPE>>&, int) {
 		ExprPtr main_expr;
 		if(c_token.ttype == Tokens::TOK_IDENTIFIER) {
 			main_expr = std::make_shared<VariableExpression>(c_token.name);
@@ -68,6 +66,5 @@ namespace Tokenparser {
 		}
 		return main_expr;
 	}
-}
 
 }

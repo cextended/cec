@@ -10,8 +10,7 @@
 
 namespace segvc {
 
-namespace Tokenizer {
-	Token readSymbol(std::istream& in) {
+	Token Tokenizer::readSymbol(std::istream& in) {
 		Token tok;
 	        tok.startOffset = tok.endOffset = in.tellg();
 	        tok.line = line;
@@ -88,6 +87,5 @@ namespace Tokenizer {
 
 		return tok;
 	}
-}
 
 }
