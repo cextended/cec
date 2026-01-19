@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <mutex>
 
 #include <segvc/typer.hxx>
 #include <segvc/irvalue.hxx>
@@ -71,6 +72,7 @@ struct ExpressionVisitor;
 struct StatementVisitor;
 
 struct Expression {
+	std::mutex mutex;
 	virtual ~Expression() = default;
 	virtual std::unique_ptr<IRValue> accept(ExpressionVisitor& v) = 0;
 };
@@ -165,6 +167,7 @@ struct FunctionCallExpression : public Expression {
 };
 
 struct Statement {
+	std::mutex mutex;
 	virtual ~Statement() = default;
 	virtual void accept(StatementVisitor& v) = 0;
 };
