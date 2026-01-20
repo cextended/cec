@@ -103,17 +103,17 @@ struct UnaryExpression : public Expression {
         std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };
 
-enum {
+enum class LiteralType {
 	LIT_NUMBER,
 	LIT_CHAR,
 	LIT_STRING
 };
 
 struct LiteralExpression : public Expression {
-	int ltype;
+	LiteralType ltype;
 	std::string value;
 
-	LiteralExpression(int ltype, std::string value);
+	LiteralExpression(LiteralType ltype, std::string value);
 
         std::unique_ptr<IRValue> accept(ExpressionVisitor& v) override;
 };

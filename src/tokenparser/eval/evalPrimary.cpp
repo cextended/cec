@@ -8,13 +8,13 @@ namespace segvc {
 			main_expr = std::make_shared<VariableExpression>(c_token.name);
 			eat(Tokens::TOK_IDENTIFIER);
 		} else if(c_token.ttype == Tokens::TOK_NUMBER_LITERAL) {
-			main_expr = std::make_shared<LiteralExpression>(LIT_NUMBER, c_token.name);
+			main_expr = std::make_shared<LiteralExpression>(LiteralType::LIT_NUMBER, c_token.name);
 			eat(Tokens::TOK_NUMBER_LITERAL);
 		} else if(c_token.ttype == Tokens::TOK_CHAR_LITERAL) {
-			main_expr = std::make_shared<LiteralExpression>(LIT_CHAR, c_token.name);
+			main_expr = std::make_shared<LiteralExpression>(LiteralType::LIT_CHAR, c_token.name);
 			eat(Tokens::TOK_CHAR_LITERAL);
 		} else if(c_token.ttype == Tokens::TOK_STRING_LITERAL) {
-			main_expr = std::make_shared<LiteralExpression>(LIT_STRING, c_token.name);
+			main_expr = std::make_shared<LiteralExpression>(LiteralType::LIT_STRING, c_token.name);
 			eat(Tokens::TOK_STRING_LITERAL);
 		} else if(eat(Tokens::TOK_DEL_PARANL)) {
 			main_expr = eval(Tokens::TOK_DEL_PARANR);
