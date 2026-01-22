@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <cstdint>
+#include <segvc/variableentry.hxx>
 
 namespace segvc {
 
@@ -69,7 +70,12 @@ struct Typer {
 	uint8_t vtype;
 	uint8_t spec;
 	std::shared_ptr<Typer> respect_typer;
-	std::vector<StmPtr> func_params;
+
+	std::vector<
+		std::pair<
+			std::string,
+			VariableEntry
+	>> func_params;
 };
 
 }

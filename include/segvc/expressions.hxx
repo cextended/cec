@@ -7,6 +7,7 @@
 
 #include <segvc/typer.hxx>
 #include <segvc/irvalue.hxx>
+#include <segvc/variableentry.hxx>
 
 namespace segvc {
 
@@ -207,6 +208,24 @@ struct FunctionDeclarationStatement : Statement {
 	DeclarationType dec_type;
         std::shared_ptr<Typer> type_spec;
         std::shared_ptr<BlockStatement> body;
+
+	/*
+	 *  The reason we don't use map<string, ...> or unordered_map is because
+	 * we should initialize the parameters in right order and also empty named (non-usable padding parameters)
+	 * can exist multiple times.
+	 *
+	 *  We'll should catch multiple variables that has non-empty but same names and throw errors
+	 * at ast visitor stages but not in the parser stage
+	 *
+	 * NOTE: Empty named parameters exist and would be used for backwards compability.
+	 *  eg. First function accept string and string's size but then you relaize you can find length of the string with loops (but Yes, bad practice for some cases)
+	 *  eg. External source call's a function with extra parameters but you only need some of the parameters
+	 */
+	std::vector<
+		std::pair<
+			std::string,
+			VariableEntry
+	>> params;
 
         void accept(StatementVisitor& v) override;
 };

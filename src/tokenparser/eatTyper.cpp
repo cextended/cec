@@ -26,15 +26,18 @@ namespace segvc {
 			else if(eat(Tokens::TOK_KEY_VOLATILE))
 				c_typer->spec |= (1 << SPEC_VOL);
 			else if(eat(Tokens::TOK_DEL_PARANL)) {
-				std::shared_ptr<BlockStatement> body = std::make_shared<BlockStatement>();
-				if( !eatDec(body, DeclarationType::UNDEFINED) ) {
+				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
+				if(!eatFnParams(ptr_typer->func_params) ) {
 					/* error */
+					return 0;
 				}
+
 				if(!eat(Tokens::TOK_DEL_PARANR)) {
 					/* error */
+					std::cerr << "Expected ' ) ' but get ' " << c_token.name << " ' !";
+					return 0;
 				}
-				std::shared_ptr<Typer> ptr_typer = std::make_shared<Typer>();
-				ptr_typer->func_params = body->childs;
+
 				if(c_typer)
 					c_typer->respect_typer = ptr_typer;
 				ptr_typer->vtype = VAR_FUN;

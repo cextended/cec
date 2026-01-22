@@ -45,6 +45,14 @@ struct Tokenparser {
 		DeclarationType dec_type
 	);
 
+	int eatFnParams(
+		std::vector<
+			std::pair<
+				std::string,
+				VariableEntry
+		>> &params
+	);
+
         int eatForStatement(
 		std::shared_ptr<BlockStatement> parent,
 		std::shared_ptr<BlockStatement> leadingBlock = nullptr
