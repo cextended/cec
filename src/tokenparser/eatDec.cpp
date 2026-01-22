@@ -1,6 +1,7 @@
 #include <segvc/tokenparser.hxx>
 #include <segvc/expressions.hxx>
 #include <segvc/qcerrors.hxx>
+#include <segvc/util/concat.hxx>
 
 namespace segvc {
 
@@ -72,13 +73,8 @@ namespace segvc {
 
 		for(auto [var_name, entry]: decStm->variables) {
 
-			/*  TODO:
-			 *  There's two bugs exist,
-			 * 1: master_typer doesn't copied
-			 * 2: concatiation/merge procesess is wrong, it must be recursive
-			 */
 			if(master_typer) {
-				master_typer->respect_typer = entry.typer;
+				concat(master_typer, entry.typer);
 				entry.typer = master_typer;
 			}
 		}
