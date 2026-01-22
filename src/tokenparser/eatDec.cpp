@@ -9,8 +9,9 @@ namespace segvc {
 		DeclarationType dec_type
 	) {
 		bool hasAssignments = false;
-		std::vector< std::tuple< std::string, std::shared_ptr<Typer>, ExprPtr > > var_list;
-		std::vector< std::shared_ptr<Typer> > t_list;
+
+		std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
+		parent->childs.push_back(decStm);
 
 		do {
 			if(c_token.ttype != Tokens::TOK_IDENTIFIER) {
@@ -42,10 +43,12 @@ namespace segvc {
 				}
 			}
 
-			var_list.push_back({
+			decStm->variables.push_back({
 				var_name,
-				c_typer,
-				initializer
+				VariableEntry {
+					c_typer,
+					initializer
+				}
 			});
 
 		} while(eat(Tokens::TOK_COMMA));
@@ -64,11 +67,10 @@ namespace segvc {
 		}
 
 
-		std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
 		decStm->dec_type = dec_type;
 		decStm->master_initializer = master_assign;
 
-		for(auto [var_name, typer, initializer]: var_list) {
+		for(auto [var_name, entry]: decStm->variables) {
 
 			/*  TODO:
 			 *  There's two bugs exist,
@@ -76,21 +78,9 @@ namespace segvc {
 			 * 2: concatiation/merge procesess is wrong, it must be recursive
 			 */
 			if(master_typer) {
-				master_typer->respect_typer = typer;
-				typer = master_typer;
+				master_typer->respect_typer = entry.typer;
+				entry.typer = master_typer;
 			}
-
-			parent->childs.push_back(decStm);
-
-			decStm->variables.push_back(
-				std::make_pair(
-					var_name,
-					VariableEntry {
-						typer,
-						initializer
-					}
-				)
-			);
 		}
 
 		return 1;
