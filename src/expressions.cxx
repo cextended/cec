@@ -21,7 +21,6 @@ std::unique_ptr<IRValue> MemberExpression::accept(ExpressionVisitor& v) { return
 std::unique_ptr<IRValue> FunctionCallExpression::accept(ExpressionVisitor& v) { return v.visit(*this); }
 
 void DeclarationStatement::accept(StatementVisitor& v) { v.visit(*this); }
-void MultipleDeclarationStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void BlockStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void FunctionDeclarationStatement::accept(StatementVisitor& v) { v.visit(*this); }
 void ExpressionStatement::accept(StatementVisitor& v) { v.visit(*this); }

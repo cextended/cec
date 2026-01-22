@@ -182,17 +182,15 @@ enum DeclarationType {
 };
 
 struct DeclarationStatement : Statement {
-	std::string name;
 	DeclarationType dec_type;
-	std::shared_ptr<Typer> type_spec;
-	ExprPtr initializer;
 
-	void accept(StatementVisitor& v) override;
-};
+	std::vector<
+		std::pair<
+			std::string,
+			VariableEntry
+		>> variables;
 
-struct MultipleDeclarationStatement : Statement {
-	std::vector< std::shared_ptr<DeclarationStatement> > list;
-	ExprPtr initializer;
+	ExprPtr master_initializer;
 
 	void accept(StatementVisitor& v) override;
 };

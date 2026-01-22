@@ -16,7 +16,6 @@ struct ExpressionVisitor {
 
 struct StatementVisitor {
 	virtual void visit(DeclarationStatement &s) = 0;
-	virtual void visit(MultipleDeclarationStatement &s) = 0;
 	virtual void visit(BlockStatement &s) = 0;
 	virtual void visit(FunctionDeclarationStatement &s) = 0;
 	virtual void visit(ExpressionStatement &s) = 0;

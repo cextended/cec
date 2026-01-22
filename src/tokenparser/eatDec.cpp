@@ -63,44 +63,35 @@ namespace segvc {
 			}
 		}
 
-		int index=0;
 
-		std::shared_ptr<MultipleDeclarationStatement> mulDecStm = std::make_shared<MultipleDeclarationStatement>();
-		mulDecStm->initializer = master_assign;
+		std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
+		decStm->dec_type = dec_type;
+		decStm->master_initializer = master_assign;
 
 		for(auto [var_name, typer, initializer]: var_list) {
+
+			/*  TODO:
+			 *  There's two bugs exist,
+			 * 1: master_typer doesn't copied
+			 * 2: concatiation/merge procesess is wrong, it must be recursive
+			 */
 			if(master_typer) {
 				master_typer->respect_typer = typer;
 				typer = master_typer;
 			}
 
-			std::shared_ptr<DeclarationStatement> decStm = std::make_shared<DeclarationStatement>();
-                        decStm->name = var_name;
-                        decStm->type_spec = typer;
-			decStm->dec_type = dec_type;
+			parent->childs.push_back(decStm);
 
-			/**
-			 *  Must specify the variable type if it's const
-			 */
-			if(decStm->dec_type == DeclarationType::CONST && !typer) {
-				std::cout << "Must specify variable type for constants!" << std::endl;
-			}
-
-			if(master_assign) {
-				if(initializer)
-					/* warning */
-					// Some variables has already been assigned!
-					std::cout << "Warning: This variables has already been assigned!" << std::endl;
-				mulDecStm->initializer = master_assign;
-				mulDecStm->list.push_back(decStm);
-			} else {
-				decStm->initializer = initializer;
-	                        parent->childs.push_back(decStm);
-			}
+			decStm->variables.push_back(
+				std::make_pair(
+					var_name,
+					VariableEntry {
+						typer,
+						initializer
+					}
+				)
+			);
 		}
-
-		if(mulDecStm->initializer = master_assign)
-			parent->childs.push_back(mulDecStm);
 
 		return 1;
 	}
