@@ -74,7 +74,7 @@ namespace segvc {
 		for(auto [var_name, entry]: decStm->variables) {
 
 			if(master_typer) {
-				concat(master_typer, entry.typer);
+				concat(entry.typer, master_typer);
 				entry.typer = master_typer;
 			}
 		}
